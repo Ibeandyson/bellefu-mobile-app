@@ -1,14 +1,14 @@
 {
   "expo": {
-    "name": "bellefu-mobile-app",
-    "slug": "bellefu-mobile-app",
+    "name": "bellefu1",
+    "slug": "bellefu_digital_agro_connec",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
     "splash": {
       "image": "./assets/splash.png",
       "resizeMode": "contain",
-      "backgroundColor": "#ffffff"
+      "backgroundColor": "#76ba1b"
     },
     "updates": {
       "fallbackToCacheTimeout": 0
@@ -22,8 +22,9 @@
     "android": {
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
-        "backgroundColor": "#FFFFFF"
-      }
+        "backgroundColor": "#76ba1b"
+      },
+      "package": "com.bellefu_digital_agro_connect.bellefu"
     },
     "web": {
       "favicon": "./assets/favicon.png"
