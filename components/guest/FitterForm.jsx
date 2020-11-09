@@ -26,12 +26,10 @@ export default function FillterForm(props) {
   })
 
   const loadStates = async() => {
-		Axios.get(`https://bellefu.com/api/${props.route.params.country.country_iso2}/state/list`)
+		Axios.get(`https://bellefu.com/api/${props.route.params.countryIso}/state/list`)
 		.then((res) => {
       setStates(res.data.states)
-      console.log(res.data.states)
 		}).catch((e) => {
-			console.log('an error occured: ', e.response.data)
 		})
   }
   
@@ -47,7 +45,6 @@ export default function FillterForm(props) {
       setCategoryData(res.data.categories)
     })
     .catch((error) => {
-      console.log(error);
     });
    }
 
@@ -62,18 +59,16 @@ export default function FillterForm(props) {
       setSubcategoryData(res.data.subcategories)
     })
     .catch((error) => {
-      console.log(error);
     });
  }
  
  const handleSubmit = () => {
-  props.navigation.navigate('Search', {find: data.search, country: props.route.params.country, token: props.token})
+  props.navigation.navigate('Search', {find: data.search, country: props.route.params.countryIso, token: props.token, subcategory: data.subcategory, category: data.category, state: data.state, min_price: data.min_price, max_price: data.max_price})
  
 }
 
  useEffect(() => {
    loadSubCategory()
-   console.log(props.route.params.country.country_iso2)
  }, [data.category])
 
  useEffect(() => {
@@ -154,10 +149,10 @@ export default function FillterForm(props) {
                 setData({...data, state: itemValue})
               }
             >
-              <Picker.Item color="gray" label="select state" value="" />
-              {states.map((data) => {
+              <Picker.Item color="gray" label="select state" />
+              {states.map((data) => (
                 <Picker.Item key={data.slug} label={data.name} value={data.slug} />
-              })}
+              ))}
             </Picker>
           </TouchableOpacity>
 

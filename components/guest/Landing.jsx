@@ -4,7 +4,8 @@ import {
   StyleSheet,
   RefreshControl,
   ScrollView,
-  ActivityIndicator
+  ActivityIndicator,
+  Text
 } from "react-native";
 import Header from "../navigations/Header";
 import Bottom from "../navigations/BottomNav";
@@ -29,9 +30,9 @@ export default function Landing(props) {
   const [token, setToken] = useState("");
   const [country, setCountry] = useState('')
 
-  const callApi = async (country, token) => {
+  const callApi = async (countryy, token) => {
     Axios.get(
-      `https://bellefu.com/api/product/list?country=${country}`,
+      `https://bellefu.com/api/product/list?country=${country.length > 0 ? country : countryy}`,
       {
         headers: {
           Authorization: token !== undefined ? `Bearer ${token}` : "hfh",
@@ -42,6 +43,7 @@ export default function Landing(props) {
     )
       .then((res) => {
         setLoading(false);
+        setLoading1(false)
         setProducts(res.data.products);
         setProductsData(res.data.products.data);
         setNextPageUrl(res.data.products.next_page_url);
@@ -50,6 +52,7 @@ export default function Landing(props) {
   }
 
   const loadData = async () => {
+    setLoading1(true)
     let tokenn = await AsyncStorage.getItem("user");
     await setToken(tokenn);
     let countryy = await AsyncStorage.getItem("countrySlug");
@@ -101,11 +104,23 @@ export default function Landing(props) {
     });
   }, []);
 
+  
+
   useEffect(() => {
+    setNextPageUrl(null)
     loadData();
-  }, []);
+  }, [country]);
 
   const _renderFooter = () => {
+    if (!loading1 && productsData.length < 1) return (
+      <View
+        style={{
+          height: 200,
+        }}
+      >
+        <Text style={{textAlign: "center", color: "gray"}}>No available ad for this country</Text>
+      </View>
+    )
     if (!loading1) return (
       <View
         style={{
@@ -127,9 +142,13 @@ export default function Landing(props) {
     );
   };
 
+  const countryChange = (country) => {
+    setCountry(country)
+  }
+
   return (
     <View>
-    <Header home={true} {...props} />
+    <Header countryChange={countryChange} home={true} {...props} />
     {loading && (
         <View style={{height: '' + 100 + '%'}}>
             <Preloader />
