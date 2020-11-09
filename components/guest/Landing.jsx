@@ -29,7 +29,7 @@ export default function Landing(props) {
 
   const callApi = async (country, token) => {
     Axios.get(
-      `https://bellefu.com/api/product/list?country=${country.country_slug}`,
+      `https://bellefu.com/api/product/list?country=${country}`,
       {
         headers: {
           Authorization: token !== undefined ? `Bearer ${token}` : "hfh",
@@ -44,21 +44,25 @@ export default function Landing(props) {
         setProductsData(res.data.products.data);
         setNextPageUrl(res.data.products.next_page_url);
       })
-      .catch((error) => {console.log(error.response)});
+      .catch((error) => {});
   }
 
   const loadData = async () => {
     let tokenn = await AsyncStorage.getItem("user");
     await setToken(tokenn);
-    let country = await AsyncStorage.getItem("country");
-    if(country !== undefined) {
-        setCountry(country)
-        callApi(country, tokenn)
+    let countryy = await AsyncStorage.getItem("countrySlug");
+      
+    if(countryy !== undefined && countryy !== null) {
+        setCountry(countryy)
+        await callApi(countryy, tokenn)
       } else {
-        let res = await fetch('https://bellefu.com/api/location/info')
-        await AsyncStorage.setItem("country", res.location_info);    
-        setCountry(res.location_info)
-        callApi(res.location_info, tokenn)  
+        let res = await Axios.get('https://bellefu.com/api/location/info')
+        AsyncStorage.setItem('countrySlug', res.data.location_info.country_slug).then(() => {
+          AsyncStorage.setItem('countryIso', res.data.location_info.country_iso2).then(() => {
+            setCountry(res.location_info.country_slug)
+            callApi(res.data.location_info.country_slug, tokenn)
+          }) 
+        })
       }
     }
 
@@ -116,11 +120,12 @@ export default function Landing(props) {
         }
             data={productsData}
             onEndReached={nextData}
+            initialNumToRender={15}
             keyExtractor={item => item.slug}
             onEndReachedThreshold={100}
-            ListHeaderComponent={<LandingPageContet {...props}/>}
+            ListHeaderComponent={<LandingPageContet token={token} country={country} {...props}/>}
             renderItem={({item, index}) => (
-                <ProductList data={productsData} token={token} item={item} key={item.slug} {...props} />
+                <ProductList data={productsData} nextPageUrl={nextPageUrl} token={token} {...props} country={country} item={item} key={item.slug} />
             )}
         />
     <ScrollView>

@@ -21,7 +21,7 @@ const SearchResult = (props) => {
   const [nextPageUrl, setNextPageUrl] = useState("");
   const [token, setToken] = useState("");
 
-  let country = props.route.params.country ? `country=${props.route.params.country.country_iso2}` : ''
+  let country = props.route.params.country ? `country=${props.route.params.country}` : ''
 	let lga = props.route.params.lga ? `&lga=${props.route.params.lga}` : '';
 	let state = props.route.params.state ? `&state=${props.route.params.state}` : '';
 	let subcategory = props.route.params.subcategory ? `&subcategory=${props.route.params.subcategory}` : '';
@@ -95,17 +95,18 @@ const SearchResult = (props) => {
           <Text>No Ad</Text>
         </View>
       )}
-        <View >
-          <View>
-            <Text style={{color: 'gray', fontSize: 14, paddingHorizontal: 10}}>
-              {props.route.params.find}
-            </Text>
-          </View>
+        <View style={{minHeight: Dimensions.get('window').height}}>
+          
           <FlatList
               data={productsData}
               onEndReached={nextData}
               keyExtractor={(item) => item.slug}
               onEndReachedThreshold={100}
+              ListHeaderComponent={<View>
+                                    <Text style={{color: 'gray', fontSize: 14, paddingHorizontal: 10, paddingVertical: 10}}>
+                                      {props.route.params.find || props.route.params.subcategory}
+                                    </Text>
+                                  </View>}
               renderItem={({ item, index }) => (
                   <ProductList
                   data={productsData}
@@ -120,7 +121,6 @@ const SearchResult = (props) => {
       </View>
       <ScrollView>
     </ScrollView>
-      <Bottom home={true} {...props} />
     </View>
   );
 };

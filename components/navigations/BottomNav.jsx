@@ -21,34 +21,34 @@ export default function BottomNav(props) {
                   <TouchableOpacity onPress={() =>  props.navigation.navigate('Home')}>
                     <View>
                         <MaterialCommunityIcons name="home" size={27} style={{textAlign: 'center', alignSelf: 'center'}} color="white" />
-                        <Text style={{color: "white" , fontSize: 10}}>Home</Text>
+                        {/* <Text style={{color: "white" , fontSize: 10}}>Home</Text> */}
                     </View>
                   </TouchableOpacity>
 
                   <TouchableOpacity onPress={() =>  props.navigation.navigate('Favourite')}>
                   <View>
                   <MaterialCommunityIcons style={{textAlign: 'center'}} name="heart" size={27} color="white" />
-                  <Text style={{color: "white" , fontSize: 10}}>Favourite</Text>
+                  {/* <Text style={{color: "white" , fontSize: 10}}>Favourite</Text> */}
                   </View>
                   </TouchableOpacity>
 
                   <TouchableOpacity onPress={() =>  props.navigation.navigate('Post')}>
                   <View style={{marginHorizontal: 10 }}>
-                  <Image style={{height: 50, width: 50, marginTop: 5}} source={require('../../images/postad.png')} />
+                  <Image style={{height: 60, width: 60, marginTop: -10}} source={require('../../images/postad.png')} />
                   </View>
                   </TouchableOpacity>
 
                   <TouchableOpacity onPress={() =>  props.navigation.navigate('Home')}>
                   <View>
                   <MaterialCommunityIcons style={{textAlign: 'center'}} name="message" size={27} color="white" />
-                  <Text style={{color: "white" , fontSize: 10}}>Message</Text>
+                  {/* <Text style={{color: "white" , fontSize: 10}}>Message</Text> */}
                   </View>
                   </TouchableOpacity>
                   
                   <TouchableOpacity onPress={() =>  props.navigation.navigate('Account')}>
                   <View>
                   <MaterialCommunityIcons style={{textAlign: 'center'}} name="account-circle" size={27} color="white" />
-                  <Text style={{color: "white" , fontSize: 10}}>Account</Text>
+                  {/* <Text style={{color: "white" , fontSize: 10}}>Account</Text> */}
                   </View>
                   </TouchableOpacity>
                                     

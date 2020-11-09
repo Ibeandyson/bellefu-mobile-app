@@ -4,59 +4,10 @@ import CategoryListing from "./CategoryListing";
 import { Card } from "react-native-paper";
 import FontAwesome from "react-native-vector-icons/FontAwesome";
 import Search from "../reusableComponents/Search";
-import AsyncStorage from "@react-native-async-storage/async-storage";
-import Axios from "axios"
 
 
 
-export default function LandingPageContet(props) {
-    const [loading, setLoading] = useState(true);
-    const [productsData, setProductsData] = useState([]);
-    const [products, setProducts] = useState([]);
-    const [nextPageUrl, setNextPageUrl] = useState("");
-    const [token, setToken] = useState("");
-    const [country, setCountry] = useState('')
-  
-    const callApi = async (country, token) => {
-      Axios.get(
-        `https://bellefu.com/api/product/list?country=${country.country_slug}`,
-        {
-          headers: {
-            Authorization: token !== undefined ? `Bearer ${token}` : "hfh",
-            "Content-Type": "application/json",
-            Accept: "application/json",
-          },
-        }
-      )
-        .then((res) => {
-          setLoading(false);
-          setProducts(res.data.products);
-          setProductsData(res.data.products.data);
-          setNextPageUrl(res.data.products.next_page_url);
-        })
-        .catch((error) => {console.log(error.response)});
-    }
-  
-    const loadData = async () => {
-      let tokenn = await AsyncStorage.getItem("user");
-      await setToken(tokenn);
-      let country = await AsyncStorage.getItem("country");
-      if(country !== undefined) {
-          setCountry(country)
-          callApi(country, tokenn)
-        } else {
-          let res = await fetch('https://bellefu.com/api/location/info')
-          await AsyncStorage.setItem("country", res.location_info);    
-          setCountry(res.location_info)
-          callApi(res.location_info, tokenn)  
-        }
-      }
-  
-    
-  
-useEffect(() => {
-    loadData();
-}, [])
+const LandingPageContet = React.memo((props) => {
 
     return (
         <View style={{ marginBottom: 10 }}>
@@ -75,7 +26,7 @@ useEffect(() => {
                 Bellefu - digital agro connect...
               </Text>
             </View>
-            <Search {...props} country={country} token={token}/>
+            <Search {...props} country={props.country} token={props.token}/>
             <View
               style={{
                 marginTop: 30,
@@ -92,8 +43,9 @@ useEffect(() => {
           </View>
         </View>
         <View style={{ marginTop: 10 }}>
-          <CategoryListing />
+          <CategoryListing token={props.token} country={props.country} {...props}/>
   </View>
   </View>
     )
-}
+})
+export default LandingPageContet
