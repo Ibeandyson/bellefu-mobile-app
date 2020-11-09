@@ -2,33 +2,13 @@ import React, {useState} from 'react';
 import {Picker, StyleSheet, Text, View, ScrollView, TouchableOpacity, Image} from 'react-native';
 import {Appbar, Button, TextInput, RadioButton} from 'react-native-paper';
 import AntDesign from 'react-native-vector-icons/AntDesign';
+import * as Permissions from 'expo-permissions';
 
 export default function PostAd(props) {
     const [selectedValue, setSelectedValue] = useState('java');
     const [checked, setChecked] = React.useState('');
 
-    // let openImagePickerAsync = async () => {
-    //     let permissionResult = await ImagePicker.requestCameraRollPermissionsAsync();
-
-    //     if (permissionResult.granted === false) {
-    //         alert('Permission to access camera roll is required!');
-    //         return;
-    //     }
-
-    //     let pickerResult = await ImagePicker.launchImageLibraryAsync();
-    //     console.log(pickerResult);
-    // };
-
-    // handleChoosePhoto = () => {
-    //     const options = {
-    //         noData: true
-    //     };
-    //     ImagePicker.launchImageLibrary(options, response => {
-    //         if (response.uri) {
-    //             setPhoto({photo: response});
-    //         }
-    //     });
-    // };
+    
 
     return (
         <View>
@@ -84,10 +64,11 @@ export default function PostAd(props) {
 
                     <View style={{padding: 20, marginTop: 20}}>
                         <Text style={{marginBottom: 10}}>*Upload the product images</Text>
-                        <Button  mode="contained" style={{backgroundColor: '#ffa500'}}>
+                        <Button mode="contained" style={{backgroundColor: '#ffa500'}}>
                             <AntDesign name="cloudupload" size={23} color="white" />
                             <Text style={{color: 'white'}}>upload image</Text>
                         </Button>
+                      
                     </View>
                     <View style={{flexDirection: 'row', padding: 10}}>
                         <RadioButton
@@ -132,6 +113,7 @@ export default function PostAd(props) {
                         <Text style={{color: 'white'}}> Post</Text>
                     </Button>
                 </View>
+                
             </ScrollView>
         </View>
     );

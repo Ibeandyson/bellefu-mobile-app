@@ -3,7 +3,8 @@ import {
   View,
   StyleSheet,
   RefreshControl,
-  ScrollView
+  ScrollView,
+  ActivityIndicator
 } from "react-native";
 import Header from "../navigations/Header";
 import Bottom from "../navigations/BottomNav";
@@ -21,6 +22,7 @@ const wait = (timeout) => {
 
 export default function Landing(props) {
   const [loading, setLoading] = useState(true);
+  const [loading1, setLoading1] = useState(true);
   const [productsData, setProductsData] = useState([]);
   const [products, setProducts] = useState([]);
   const [nextPageUrl, setNextPageUrl] = useState("");
@@ -72,6 +74,7 @@ export default function Landing(props) {
     if (nextPageUrl === null) {
       return;
     } else {
+      setLoading1(true)
       Axios.get(nextPageUrl, {
         headers: {
           Authorization: token !== undefined ? `Bearer ${token}` : "hfh",
@@ -79,6 +82,7 @@ export default function Landing(props) {
           Accept: "application/json",
         },
       }).then((res) => {
+        setLoading1(false)
         setProducts(res.data.products);
         setNextPageUrl(res.data.products.next_page_url);
         setProductsData(productsData.concat(...res.data.products.data));
@@ -101,6 +105,28 @@ export default function Landing(props) {
     loadData();
   }, []);
 
+  const _renderFooter = () => {
+    if (!loading1) return (
+      <View
+        style={{
+          height: 200,
+        }}
+      />
+    )
+
+    return (
+      <View
+        style={{
+          height: 200,
+          justifyContent: 'flex-start',
+          alignItems: 'center'
+        }}
+      >
+        <ActivityIndicator color="#76BA1A" animating size="large" />
+      </View>
+    );
+  };
+
   return (
     <View>
     <Header home={true} {...props} />
@@ -122,11 +148,12 @@ export default function Landing(props) {
             onEndReached={nextData}
             initialNumToRender={15}
             keyExtractor={item => item.slug}
-            onEndReachedThreshold={100}
+            onEndReachedThreshold={0.5}
             ListHeaderComponent={<LandingPageContet token={token} country={country} {...props}/>}
             renderItem={({item, index}) => (
                 <ProductList data={productsData} nextPageUrl={nextPageUrl} token={token} {...props} country={country} item={item} key={item.slug} />
             )}
+            ListFooterComponent={_renderFooter}
         />
     <ScrollView>
     </ScrollView>

@@ -16,6 +16,7 @@ import Preloader from "./Preloader";
 
 const SearchResult = (props) => {
   const [loading, setLoading] = useState(true);
+  const [loading1, setLoading1] = useState(true);
   const [productsData, setProductsData] = useState([]);
   const [products, setProducts] = useState([]);
   const [nextPageUrl, setNextPageUrl] = useState("");
@@ -78,6 +79,28 @@ const SearchResult = (props) => {
   useEffect(() => {
     load()
   }, [props.route.params.find])
+
+  const _renderFooter = () => {
+    if (!loading1) return (
+      <View
+        style={{
+          height: 200,
+        }}
+      />
+    )
+
+    return (
+      <View
+        style={{
+          height: 200,
+          justifyContent: 'flex-start',
+          alignItems: 'center'
+        }}
+      >
+        <ActivityIndicator color="#76BA1A" animating size="large" />
+      </View>
+    );
+  };
   return (
     <View>
       <Header token={props.route.params.token} country={props.route.params.country} find={props.route.params.find} {...props} />
@@ -101,7 +124,7 @@ const SearchResult = (props) => {
               data={productsData}
               onEndReached={nextData}
               keyExtractor={(item) => item.slug}
-              onEndReachedThreshold={100}
+              onEndReachedThreshold={0.5}
               ListHeaderComponent={<View>
                                     <Text style={{color: 'gray', fontSize: 14, paddingHorizontal: 10, paddingVertical: 10}}>
                                       {props.route.params.find || props.route.params.subcategory}
@@ -116,6 +139,7 @@ const SearchResult = (props) => {
                   {...props}
                   />
               )}
+              ListFooterComponent={_renderFooter}
             />
         </View>
       </View>
