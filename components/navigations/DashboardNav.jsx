@@ -79,13 +79,14 @@ export default function DashboardNav(props) {
                     </TouchableOpacity>
 
                     <Divider />
-
+                    <TouchableOpacity onPress={() =>  props.navigation.navigate('settings')}>
                     <Card style={{borderRadius: 0}}>
                         <List.Item
                             title="Settings"
                             left={props => <List.Icon {...props} icon="power-settings" color="#ffa500" />}
                         />
                     </Card>
+                    </TouchableOpacity>
 
                     <Divider />
                     <TouchableOpacity onPress={() => logout}>

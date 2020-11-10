@@ -19,6 +19,8 @@ import Verification from "./components/user/Verification";
 import PostAd from "./components/user/PostAd";
 import Landing from "./components/guest/Landing";
 import Dashboard from "./components/user/Dashboard";
+import UpdateProfile from "./components/user/UpadateProfile"
+import SettingsNav from "./components/navigations/SettingsNav"
 
 import { Provider } from "react-redux";
 import store from "./store";
@@ -129,6 +131,16 @@ export default function App(props) {
                 name="Verification"
                 options={{ headerShown: true }}
                 component={withAuth(Verification)}
+              />
+               <Stack.Screen
+                name="Update"
+                options={{ headerShown: true }}
+                component={withAuth(UpdateProfile)}
+              />
+               <Stack.Screen
+                name="settings"
+                options={{ headerShown: true }}
+                component={withAuth(SettingsNav)}
               />
             </Stack.Navigator>
           </NavigationContainer>

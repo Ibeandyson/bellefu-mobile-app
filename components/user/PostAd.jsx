@@ -1,38 +1,32 @@
-import React, {useState} from 'react';
+import React, {useState, useEffect} from 'react';
 import {Picker, StyleSheet, Text, View, ScrollView, TouchableOpacity, Image} from 'react-native';
 import {Appbar, Button, TextInput, RadioButton} from 'react-native-paper';
 import AntDesign from 'react-native-vector-icons/AntDesign';
+import * as ImagePicker from 'expo-image-picker';
+import Constants from 'expo-constants';
 
 export default function PostAd(props) {
     const [selectedValue, setSelectedValue] = useState('java');
     const [checked, setChecked] = React.useState('');
+    const [image, setImage] = useState(null);
 
-    // let openImagePickerAsync = async () => {
-    //     let permissionResult = await ImagePicker.requestCameraRollPermissionsAsync();
+    const pickImage = async () => {
+        let result = await ImagePicker.launchImageLibraryAsync({
+            mediaTypes: ImagePicker.MediaTypeOptions.All,
+            allowsEditing: true,
+            aspect: [4, 3],
+            quality: 1
+        });
 
-    //     if (permissionResult.granted === false) {
-    //         alert('Permission to access camera roll is required!');
-    //         return;
-    //     }
+        console.log(result);
 
-    //     let pickerResult = await ImagePicker.launchImageLibraryAsync();
-    //     console.log(pickerResult);
-    // };
-
-    // handleChoosePhoto = () => {
-    //     const options = {
-    //         noData: true
-    //     };
-    //     ImagePicker.launchImageLibrary(options, response => {
-    //         if (response.uri) {
-    //             setPhoto({photo: response});
-    //         }
-    //     });
-    // };
+        if (!result.cancelled) {
+            setImage(result.uri);
+        }
+    };
 
     return (
         <View>
-            
             <ScrollView showsVerticalScrollIndicator={false}>
                 <View style={styles.container}>
                     <TouchableOpacity
@@ -80,15 +74,19 @@ export default function PostAd(props) {
                         mode="outlined"
                         label="Discription"
                     />
-                    {/* <Image source={{uri: 'https://i.imgur.com/TkIrScD.png'}} /> */}
+
+                    <View style={{justifyContent: 'center'}}>
+                        {image && <Image source={{uri: image}} style={{width: 200, height: 200}} />}
+                    </View>
 
                     <View style={{padding: 20, marginTop: 20}}>
                         <Text style={{marginBottom: 10}}>*Upload the product images</Text>
-                        <Button  mode="contained" style={{backgroundColor: '#ffa500'}}>
+                        <Button onPress={pickImage} mode="contained" style={{backgroundColor: '#ffa500'}}>
                             <AntDesign name="cloudupload" size={23} color="white" />
                             <Text style={{color: 'white'}}>upload image</Text>
                         </Button>
                     </View>
+
                     <View style={{flexDirection: 'row', padding: 10}}>
                         <RadioButton
                             value="free"
