@@ -35,7 +35,7 @@ const ProductList = React.memo((props) => {
         <View style={styles.img}>
           <TouchableOpacity
             onPress={() =>
-              props.navigation.navigate("Detail", { item: props.item })
+              props.navigation.navigate("Detail", { item: props.item, token: props.token })
             }
           >
             <Image
@@ -114,22 +114,21 @@ const ProductList = React.memo((props) => {
         </View>
         <View style={styles.contact}>
           <View style={{ paddingLeft: 10 }}>
-            <Button mode="contained" color="#76BA1A" style={{ width: 140 }}>
-              <Fontisto name="hipchat" size={13} color="white" />
-              <Text style={{ color: "white", fontSize: 12, paddingLeft: 60 }}>
+            <Button mode="outlined" style={{ width: 140, borderColor:"#76ba1b", borderWidth: 1.5 }}>
+              <Fontisto name="hipchat" size={13} color="#76BA1A" />
+              <Text style={{ color: "#76BA1A", fontSize: 12, paddingLeft: 60 }}>
                 Chat
               </Text>
             </Button>
           </View>
           <View style={{ paddingLeft: 10 }}>
             <Button
-              mode="contained"
-              color="#ffa500"
-              style={{ width: 140 }}
+              mode="outlined"
+              style={{ width: 140, borderColor:"#ffa500", borderWidth: 1.5 }}
               onPress={showModal}
             >
-              <Fontisto name="phone" size={13} color="white" />
-              <Text style={{ color: "white", fontSize: 12 }}>contact</Text>
+              <Fontisto name="phone" size={13} color="#ffa500" />
+              <Text style={{ color: "#ffa500", fontSize: 12 }}>contact</Text>
             </Button>
           </View>
           <View style={{ marginLeft: 10, alignSelf: "center" }}>
