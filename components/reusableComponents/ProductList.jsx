@@ -69,7 +69,7 @@ const ProductList = React.memo((props) => {
                 />
               </View>
               <Paragraph style={{ fontSize: 10.5, maxWidth: 160 }}>
-                <Text style={{ color: "#666968" }} ellipsizeMode='tail' numberOfLines={1}>{props.item.address.substring(0, 20)}...</Text>
+                <Text style={{ color: "#666968" }} ellipsizeMode='tail' numberOfLines={1}>{props.item.address && props.item.address.substring(0, 20)}...</Text>
               </Paragraph>
             </View>
             <View

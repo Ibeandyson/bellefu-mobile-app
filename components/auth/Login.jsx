@@ -101,6 +101,7 @@ const Login = ({navigation}) => {
                 await dispatch({type: LOAD_USER_COUNTRY, country: res.data.location_info})
                 await AsyncStorage.setItem('countrySlug', res.data.location_info.country_slug)
                 await AsyncStorage.setItem('countryIso', res.data.location_info.country_iso2)
+                await AsyncStorage.setItem('countryName', res.data.location_info.country_name)
 			    await AsyncStorage.setItem('user', res.data.token)
                 Alert.alert('login successful', `what would you like to do? ${res.data.user.profile.first_name}`, [
                     {text: 'Browse Products', onPress: () => navigation.replace('Home')},
