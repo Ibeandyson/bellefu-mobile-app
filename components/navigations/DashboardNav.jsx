@@ -79,7 +79,7 @@ export default function DashboardNav(props) {
                     </TouchableOpacity>
 
                     <Divider />
-                    <TouchableOpacity onPress={() =>  props.navigation.navigate('settings')}>
+                    <TouchableOpacity onPress={() =>  props.navigation.navigate('Settings')}>
                     <Card style={{borderRadius: 0}}>
                         <List.Item
                             title="Settings"

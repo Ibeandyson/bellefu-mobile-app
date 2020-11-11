@@ -4,7 +4,6 @@ import { StyleSheet, Text, View } from "react-native";
 import { DefaultTheme, Provider as PaperProvider } from "react-native-paper";
 import { NavigationContainer } from "@react-navigation/native";
 import { createStackNavigator } from "@react-navigation/stack";
-import Header from "./components/navigations/Header";
 import ProductDetail from "./components/guest/ProductDetail";
 import SearchResult from "./components/guest/SearchResult";
 import DashboardNav from "./components/navigations/DashboardNav";
@@ -21,6 +20,7 @@ import Landing from "./components/guest/Landing";
 import Dashboard from "./components/user/Dashboard";
 import UpdateProfile from "./components/user/UpadateProfile"
 import SettingsNav from "./components/navigations/SettingsNav"
+import PostAdPayment from "./components/user/PostAdPayment"
 
 import { Provider } from "react-redux";
 import store from "./store";
@@ -144,7 +144,12 @@ export default function App(props) {
                 component={withAuth(UpdateProfile)}
               />
                <Stack.Screen
-                name="settings"
+                name="Payment"
+                options={{ headerShown: true }}
+                component={withAuth(PostAdPayment)}
+              />
+               <Stack.Screen
+                name="Settings"
                 options={{ headerShown: true }}
                 component={withAuth(SettingsNav)}
               />

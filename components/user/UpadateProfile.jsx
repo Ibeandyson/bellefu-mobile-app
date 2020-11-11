@@ -185,7 +185,7 @@ export default function UpadateProfile(props) {
           payload.append("country_code", updateData.country_code);
           payload.append("address", updateData.address);
           payload.append("bio", updateData.bio);
-          payload.append('avatar', { uri: localUri, name: filename, type });
+          payload.append('avatar', { uri: localUri, name: filename, type});
         
         axios.post("https://bellefu.com/api/user/profile/update", payload, {
             
@@ -201,7 +201,7 @@ export default function UpadateProfile(props) {
             Alert.alert(res.data.message)
             console.log("succes", res.data.message)
           }).catch(e => {
-              console.log("submit", e)
+            console.log('submit', e.response.data);
           })
     };
 
@@ -349,7 +349,7 @@ export default function UpadateProfile(props) {
                                 </Picker>
                             </TouchableOpacity>
                         </View>
-                        <View style={{justifyContent: 'center'}}>
+                        <View style={{justifyContent: 'center', marginTop: 10, alignSelf: "center"}}>
                             {image && <Image source={{uri: image}} style={{width: 200, height: 200}} />}
                         </View>
 
