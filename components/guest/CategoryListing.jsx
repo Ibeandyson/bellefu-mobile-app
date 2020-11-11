@@ -39,7 +39,7 @@ export default function CategoryListing(props) {
                 }}>
                   {categoryData && categoryData.map((data) => (  
                     <Card key={data.slug} style={{width: 114, margin: 3, height: 100}}>
-                        <TouchableOpacity onPress={() => props.navigation.navigate("Subcategory", {category_slug: data.slug, country: props.country})} >
+                        <TouchableOpacity onPress={() => props.navigation.navigate("Subcategory", {category_slug: data.slug, country: props.country, token: props.token})} >
                             <View style={{justifyContent: 'center', alignItems: 'center', padding: 20}}>
                                 <Image resizeMode="contain" style={{height: 40, width: 55, padding: 20,}} source={{uri: `https://bellefu.com/images/categories/${data.image}`}} />
                                 <View style={{justifyContent: 'center', alignItems: 'center'}}>
