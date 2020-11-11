@@ -223,8 +223,10 @@ const Registration = ({navigation}) => {
                 await setLoading(false)
                 await dispatch({ type: USER_SIGNUP_SUCCESS, payload: data });
                 await dispatch({type: LOAD_USER_COUNTRY, country: res.data.location_info})
-                await AsyncStorage.setItem('country', JSON.stringify(res.data.location_info))
-			    await AsyncStorage.setItem('user', res.data.token)
+                await AsyncStorage.setItem('countrySlug', res.data.location_info.country_slug)
+                await AsyncStorage.setItem('countryIso', res.data.location_info.country_iso2)
+                await AsyncStorage.setItem('user', res.data.token)
+                await AsyncStorage.setItem('countryName', res.data.location_info.country_name)
                 Alert.alert('login successful', `what would you like to do? ${res.data.user.profile.first_name}`, [
                     {text: 'Browse Products', onPress: () => navigation.navigate('Home')},
                     {text: 'Go to Profile', onPress: () => navigation.navigate('Account')}

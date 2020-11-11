@@ -2,8 +2,9 @@ import React, {useState, useEffect}  from 'react';
 import {View, Text, Image} from 'react-native';
 import {Card} from 'react-native-paper';
 import axios from 'axios';
+import { TouchableOpacity } from 'react-native-gesture-handler';
 
-export default function CategoryListing() {
+export default function CategoryListing(props) {
     const [categoryData, setCategoryData] = useState([]);
    
 	const loadCategory = () => {
@@ -38,13 +39,15 @@ export default function CategoryListing() {
                 }}>
                   {categoryData && categoryData.map((data) => (  
                     <Card key={data.slug} style={{width: 114, margin: 3, height: 100}}>
-                        <View style={{justifyContent: 'center', alignItems: 'center', padding: 20}}>
-                            <Image style={{height: 30, width: 30, padding: 20}} source={{uri: `https://bellefu.com/images/categories/${data.image}`}} />
-                    <View style={{justifyContent: 'center', alignItems: 'center'}}>
-                        <Text style={{fontSize: 9,paddingTop:10 , alignSelf: "center", textAlign: 'center'}}>{data.name}</Text>
-                    </View>
-                    
-                        </View>
+                        <TouchableOpacity onPress={() => props.navigation.navigate("Subcategory", {category_slug: data.slug, country: props.country})} >
+                            <View style={{justifyContent: 'center', alignItems: 'center', padding: 20}}>
+                                <Image style={{height: 30, width: 30, padding: 20}} source={{uri: `https://bellefu.com/images/categories/${data.image}`}} />
+                                <View style={{justifyContent: 'center', alignItems: 'center'}}>
+                                    <Text style={{fontSize: 9,paddingTop:10 , alignSelf: "center", textAlign: 'center'}}>{data.name}</Text>
+                                </View>
+                        
+                            </View>
+                        </TouchableOpacity>
                     </Card>
                 	))}
             </View>

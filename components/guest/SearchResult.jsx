@@ -5,7 +5,8 @@ import {
   ScrollView,
   Text,
   Dimensions,
-  SafeAreaView 
+  SafeAreaView, 
+  ActivityIndicator
 } from "react-native";
 import Bottom from "../navigations/BottomNav";
 import { FlatList, TouchableOpacity } from "react-native-gesture-handler";
@@ -16,12 +17,13 @@ import Preloader from "./Preloader";
 
 const SearchResult = (props) => {
   const [loading, setLoading] = useState(true);
+  const [loading1, setLoading1] = useState(true);
   const [productsData, setProductsData] = useState([]);
   const [products, setProducts] = useState([]);
   const [nextPageUrl, setNextPageUrl] = useState("");
   const [token, setToken] = useState("");
+  const [country, setCountry] = useState(props.route.params.country ? `country=${props.route.params.country}` : '')
 
-  let country = props.route.params.country ? `country=${props.route.params.country.country_iso2}` : ''
 	let lga = props.route.params.lga ? `&lga=${props.route.params.lga}` : '';
 	let state = props.route.params.state ? `&state=${props.route.params.state}` : '';
 	let subcategory = props.route.params.subcategory ? `&subcategory=${props.route.params.subcategory}` : '';
@@ -30,12 +32,11 @@ const SearchResult = (props) => {
   let minPrice = props.route.params.minPrice ? `&min_price=${props.route.params.minPrice}` : '';
   let find = props.route.params.find ? `&find=${props.route.params.find}` : '';
 
-  let apiUrl = `https://bellefu.com/api/product/list?${country}${lga}${state}${subcategory}${category}${maxPrice}${minPrice}${find}`;
 
   const load = async () => {
     setLoading(true);
 		Axios
-			.get(apiUrl, {
+			.get(`https://bellefu.com/api/product/list?${country}${lga}${state}${subcategory}${category}${maxPrice}${minPrice}${find}`, {
 				headers: {
 					Authorization: props.route.params.token !== undefined ? `Bearer ${props.route.params.token}` : 'hfh',
 					"Content-Type": "application/json",
@@ -47,7 +48,7 @@ const SearchResult = (props) => {
 				setProducts(res.data.products)
         setProductsData(res.data.products.data);
         setNextPageUrl(res.data.products.next_page_url)
-        console.log("check:", res.data)
+        console.log(res.config)
 				setError("");
 			})
 			.catch((error) => {
@@ -75,12 +76,38 @@ const SearchResult = (props) => {
     }
   };
 
+  const countryChange = (country) => {
+    setCountry(`country=${country}`)
+  }
+
   useEffect(() => {
     load()
-  }, [props.route.params.find])
+  }, [props.route.params.find, country, props.route.params.category, props.route.params.subcategory, props.route.params.lga, props.route.params.state, props.route.params.minPrice, props.route.params.maxPrice])
+
+  const _renderFooter = () => {
+    if (!loading1) return (
+      <View
+        style={{
+          height: 200,
+        }}
+      />
+    )
+
+    return (
+      <View
+        style={{
+          height: 250,
+          justifyContent: 'flex-start',
+          alignItems: 'center'
+        }}
+      >
+        <ActivityIndicator color="#76BA1A" animating size="large" />
+      </View>
+    );
+  };
   return (
     <View>
-      <Header token={props.route.params.token} country={props.route.params.country} find={props.route.params.find} {...props} />
+      <Header countryChange={countryChange} token={props.route.params.token} country={props.route.params.country} find={props.route.params.find} {...props} />
       <View>
       {loading && (
         <View style={{ height: Dimensions.get('window').height}}>
@@ -95,17 +122,18 @@ const SearchResult = (props) => {
           <Text>No Ad</Text>
         </View>
       )}
-        <View >
-          <View>
-            <Text style={{color: 'gray', fontSize: 14, paddingHorizontal: 10}}>
-              {props.route.params.find}
-            </Text>
-          </View>
+        <View style={{minHeight: Dimensions.get('window').height}}>
+          
           <FlatList
               data={productsData}
               onEndReached={nextData}
               keyExtractor={(item) => item.slug}
-              onEndReachedThreshold={100}
+              onEndReachedThreshold={0.5}
+              ListHeaderComponent={<View>
+                                    <Text style={{color: 'gray', fontSize: 14, paddingHorizontal: 10, paddingVertical: 10}}>
+                                      {props.route.params.find || props.route.params.subcategory}
+                                    </Text>
+                                  </View>}
               renderItem={({ item, index }) => (
                   <ProductList
                   data={productsData}
@@ -115,12 +143,12 @@ const SearchResult = (props) => {
                   {...props}
                   />
               )}
+              ListFooterComponent={_renderFooter}
             />
         </View>
       </View>
       <ScrollView>
     </ScrollView>
-      <Bottom home={true} {...props} />
     </View>
   );
 };

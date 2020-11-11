@@ -99,7 +99,9 @@ const Login = ({navigation}) => {
                 console.log(res.data)
                 await dispatch({ type: USER_SIGNIN_SUCCESS, payload: res.data.user });
                 await dispatch({type: LOAD_USER_COUNTRY, country: res.data.location_info})
-                await AsyncStorage.setItem('country', JSON.stringify(res.data.location_info))
+                await AsyncStorage.setItem('countrySlug', res.data.location_info.country_slug)
+                await AsyncStorage.setItem('countryIso', res.data.location_info.country_iso2)
+                await AsyncStorage.setItem('countryName', res.data.location_info.country_name)
 			    await AsyncStorage.setItem('user', res.data.token)
                 Alert.alert('login successful', `what would you like to do? ${res.data.user.profile.first_name}`, [
                     {text: 'Browse Products', onPress: () => navigation.replace('Home')},

@@ -2,53 +2,22 @@ import React from "react";
 import { View, Text, StyleSheet, Image, TouchableOpacity } from "react-native";
 import { Card, Paragraph, Button, Portal, Modal } from "react-native-paper";
 import AntDesign from "react-native-vector-icons/AntDesign";
-import MaterialCommunityIcons from "react-native-vector-icons/MaterialCommunityIcons";
 import Fontisto from "react-native-vector-icons/Fontisto";
 import SimpleLineIcons from "react-native-vector-icons/SimpleLineIcons";
 import Icon from "react-native-vector-icons/AntDesign";
 import NumberFormat from "react-number-format";
 import { Linking } from "react-native";
-import Axios from "axios";
 import ContactModal from "../reusableComponents/ContactModal";
+import Fav from "./Fav";
 
-export default function ProductList(props) {
+const ProductList = React.memo((props) => {
   //FOR CONTACT MODAL
   const [visible, setVisible] = React.useState(false);
   const [convert, setConvert] = React.useState(false);
   const [lastItem, setLastItem] = React.useState(props.data.slice(-1));
   const showModal = () => setVisible(true);
   const hideModal = () => setVisible(false);
-  const [isRed, setIsRed] = React.useState(
-    props.token ? (props.item.is_user_favourite ? true : false) : false
-  );
-
-  const toggleFav = (e, product_slug, isFav, color) => {
-    if (props.token === undefined) {
-      props.navigation.navigate("Login");
-    } else {
-      setIsRed(!isRed);
-      Axios.get(
-        `https://bellefu.com/api/user/product/favourite/${
-          isFav ? "remove" : "add"
-        }/${product_slug}`,
-        {
-          headers: {
-            Authorization:
-              props.token !== undefined ? `Bearer ${props.token}` : "hfh",
-            "Content-Type": "application/json",
-            Accept: "application/json",
-          },
-        }
-      )
-        .then((res) => {
-          console.log(res);
-        })
-        .catch((error) => {
-          console.log(error);
-        });
-    }
-  };
-
+  
   const shareToWhatsAppWithContact = (text, phoneNumber) => {
     Linking.openURL(`whatsapp://send?text=${text}&phone=${phoneNumber}`);
   };
@@ -59,7 +28,7 @@ export default function ProductList(props) {
 
   return (
     <View
-      style={{ marginBottom: lastItem[0].slug === props.item.slug ? 160 : 0 }}
+      style={{ marginBottom: lastItem[0].slug === props.item.slug && props.nextPageUrl === null ? 160 : 0 }}
     >
       {/* CARD FOR PRODUCT LISTING START HERE */}
       <Card style={{ marginBottom: 5, borderRadius: 0, marginHorizontal: 8 }}>
@@ -92,15 +61,15 @@ export default function ProductList(props) {
                 alignItems: "center",
               }}
             >
-              <View style={{ marginLeft: 20 }}>
+              <View style={{ marginLeft: 20, marginRight: 10 }}>
                 <SimpleLineIcons
                   name="location-pin"
                   size={12}
                   color="#666968"
                 />
               </View>
-              <Paragraph style={{ paddingLeft: 5, fontSize: 11 }}>
-                <Text style={{ color: "#666968" }}>{props.item.address}</Text>
+              <Paragraph style={{ fontSize: 10.5, maxWidth: 160 }}>
+                <Text style={{ color: "#666968" }} ellipsizeMode='tail' numberOfLines={1}>{props.item.address && props.item.address.substring(0, 20)}...</Text>
               </Paragraph>
             </View>
             <View
@@ -164,17 +133,7 @@ export default function ProductList(props) {
             </Button>
           </View>
           <View style={{ marginLeft: 10, alignSelf: "center" }}>
-            <TouchableOpacity
-              onPress={(e) =>
-                toggleFav(e, props.item.slug, props.item.is_user_favourite)
-              }
-            >
-              <MaterialCommunityIcons
-                name="heart"
-                size={25}
-                color={isRed ? "#eb4034" : "#ffa500"}
-              />
-            </TouchableOpacity>
+                <Fav {...props} />
           </View>
         </View>
       </Card>
@@ -188,7 +147,8 @@ export default function ProductList(props) {
       />
     </View>
   );
-}
+})
+export default ProductList
 
 const styles = StyleSheet.create({
   my_card: {

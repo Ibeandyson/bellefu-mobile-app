@@ -25,6 +25,7 @@ import SettingsNav from "./components/navigations/SettingsNav"
 import { Provider } from "react-redux";
 import store from "./store";
 import withAuth from "./withAuth";
+import SubcategoryListing from "./components/guest/SubcategoryListing";
 
 const theme = {
   ...DefaultTheme,
@@ -59,6 +60,11 @@ export default function App(props) {
                 name="Home"
                 options={{ headerShown: false }}
                 component={Landing}
+              />
+              <Stack.Screen
+                name="Subcategory"
+                options={{ headerShown: true }}
+                component={SubcategoryListing}
               />
 
               <Stack.Screen

@@ -53,13 +53,9 @@ export default function ProductDetail(props) {
         console.log(res.data);
       })
       .catch((error) => {
-        console.log(error);
+        console.log(error.response);
       });
   }, []);
-
-  useEffect(() => {
-    console.log(productsDataDetail);
-  }, [images]);
 
   const renderItem = (data) => (
     <View key={data.destinationId} style={styles.item}>
