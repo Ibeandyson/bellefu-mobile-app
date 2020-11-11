@@ -10,11 +10,11 @@ import { Linking } from "react-native";
 import ContactModal from "../reusableComponents/ContactModal";
 import Fav from "./Fav";
 
+
 const ProductList = React.memo((props) => {
   //FOR CONTACT MODAL
   const [visible, setVisible] = React.useState(false);
   const [convert, setConvert] = React.useState(false);
-  const [lastItem, setLastItem] = React.useState(props.data.slice(-1));
   const showModal = () => setVisible(true);
   const hideModal = () => setVisible(false);
   
@@ -28,7 +28,6 @@ const ProductList = React.memo((props) => {
 
   return (
     <View
-      style={{ marginBottom: lastItem[0].slug === props.item.slug && props.nextPageUrl === null ? 160 : 0 }}
     >
       {/* CARD FOR PRODUCT LISTING START HERE */}
       <Card style={{ marginBottom: 5, borderRadius: 0, marginHorizontal: 8 }}>

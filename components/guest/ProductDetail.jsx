@@ -11,16 +11,16 @@ import {
   Linking,
 } from "react-native";
 import Carousel, { PaginationLight } from "react-native-x2-carousel";
-import { Card, Avatar, Button, Portal, Modal, TextInput, Divider } from "react-native-paper";
+import { Card, Avatar, Button, Modal, TextInput, Divider } from "react-native-paper";
 import SimpleLineIcons from "react-native-vector-icons/SimpleLineIcons";
 import HTML from 'react-native-render-html';
-import { WebView } from "react-native-webview";
-import MaterialCommunityIcons from "react-native-vector-icons/MaterialCommunityIcons";
 import axios from "axios";
 import Preloader from "../guest/Preloader";
 import NumberFormat from "react-number-format";
 import ContactModal from "../reusableComponents/ContactModal";
 import Axios from "axios";
+import ProductList from "../reusableComponents/ProductList";
+
 
 
 export default function ProductDetail(props) {
@@ -34,6 +34,8 @@ export default function ProductDetail(props) {
   const [isReviewSuccess, setIsReviewSuccess] = useState(false)
   const [data, setData] = useState([])
   const [stat, setStat] = useState({})
+  const [total, setTotal] = useState(0)
+  const [relatedAds, setRelatedAds] = useState([])
   const [reportBody, setReportBody] = useState({
 		report_title: '',
 		report_message: ''
@@ -108,9 +110,33 @@ export default function ProductDetail(props) {
 			})
 			.then((res) => {
         setReportLoading(false)
-        setTimeout(() => {
-          setIsReportSuccess(false)
-        }, 2500)
+        setIsReportSuccess(true)
+			})
+			.catch((error) => {
+				setReportLoading(false)
+			});
+  }
+  
+  const handleReview = () => {
+		setReportLoading(true)
+		if(props.route.params.token === undefined || props.route.params.maxPrice === null) {
+			props.navigation.navigate("Login")
+		}
+		Axios
+			.post(`https://bellefu.com/api/user/product/review/${productsDataDetail.slug}`, {
+        review_message: review.review,
+		    review_rating: review.rating,
+      }, {
+				headers: {
+					Authorization: `Bearer ${props.route.params.token}`,
+					"Content-Type": "application/json",
+					Accept: "application/json"
+				}
+			})
+			.then((res) => {
+        setReportLoading(false)
+        setIsReviewSuccess(true)
+        
 			})
 			.catch((error) => {
 				setReportLoading(false)
@@ -139,9 +165,8 @@ export default function ProductDetail(props) {
 		Axios.get(`https://bellefu.com/api/product/rating/for/${slug}`)
 		.then((res) => {
       setStat(res.data)
-      // console.log(res.data)
+      setTotal(Number(res.data.r1_count) + Number(res.data.r2_count) + Number(res.data.r3_count) + Number(res.data.r4_count) + Number(res.data.r5_count))
 		}).catch(e => {
-      // console.log(e.response)
     })
 		
 	}
@@ -160,9 +185,10 @@ export default function ProductDetail(props) {
         setProfile(res.data.product.user.profile);
         setproductsDataDetail(res.data.product);
         setLoading(false);
-        console.log(res)
+        setRelatedAds(res.data.related_products)
         handleCall(res.data.product.slug)
         handleStat(res.data.product.slug)
+        
         for (var i = 0; i < res.data.product.images.length; i++) {
           DATA.push({
             destinationId: `00${i + 1}`,
@@ -178,7 +204,7 @@ export default function ProductDetail(props) {
 
   const renderItem = (data) => (
     <View key={data.destinationId} style={styles.item}>
-      <Image style={{ height: 280, width: Dimensions.get('window').width }} source={{ uri: data.uri }} />
+      <Image resizeMode="contain" style={{ height: 280, width: Dimensions.get('window').width }} source={{ uri: data.uri }} />
     </View>
   );
 
@@ -348,7 +374,7 @@ export default function ProductDetail(props) {
             <Button mode="outlined" style={{borderColor:"#76ba1b", borderWidth: 1.5 }} onPress={showModal}>
               <Text style={{ color: "#76ba1b", fontSize: 11 }}>Contact Me</Text>
             </Button>
-            <Text style={{marginVertical: 5}}>or</Text>
+            <Text style={{marginVertical: 5, color: "#76ba1b",}}>or</Text>
             <View>
               <TextInput
                   style={{width: 300, fontSize: 13}}
@@ -428,7 +454,7 @@ export default function ProductDetail(props) {
               paddingLeft: 15,
             }}
           >
-            Customer Reviews
+            CUSTOMER REVIEWS
           </Text>
           <View style={{
               fontSize: 13,
@@ -439,16 +465,22 @@ export default function ProductDetail(props) {
               fontSize: 15,
             }} >
               <View style={{justifyContent: 'flex-start', flexDirection: 'row'}}>
-              <StarRating
+              {stat.average_rating && stat.average_rating > 0 ? (
+                <StarRating
                 disabled={true}
                 maxStars={5}
-                rating={3.5}
+                rating={stat.average_rating}
                 halfStarEnabled={true}
                 fullStarColor="#FFB900"
                 starSize={19}
               />
-                <Text>  4.5 / 5</Text>
+              ) : (
+                <View />
+              )
+            }
+                <Text style={{color: "#1a1919"}}>{stat.average_rating && stat.average_rating > 0 ? ` ${stat.average_rating} / 5` : "No review yet"}</Text>
               </View>
+              <Text style={{marginTop: 5, color: "#1a1919"}}>{total === 0 ? '' : `${total} total ratings`} </Text>
                 <Button onPress={showModal2} mode="contained" color="#76ba1b" style={{alignSelf: 'flex-start', marginTop: 10 }}>
                   <Text style={{ color: "white", fontSize: 11 }}>Review Ad</Text>
                   </Button>
@@ -460,25 +492,49 @@ export default function ProductDetail(props) {
                   <StarRating
                     disabled={true}
                     maxStars={5}
-                    rating={data.rating}
+                    rating={Number(data.rating)}
                     halfStarEnabled={true}
                     fullStarColor="#FFB900"
                     starSize={15}
                   />
                   </View>
                   <View style={{marginTop: 5, justifyContent: 'flex-start', flexDirection: 'row'}}>
-                    <Text style={{fontSize: 12, opacity: 0.78, color: "#1a1919"}}>By {data.user.profile && `${data.user.profile.first_name} ${data.user.profile.last_name}`}</Text>
-                    <Moment style={{ fontSize: 12, color: "#1a1919", opacity: 0.78 }} element={Text} format="MMMM Do, YYYY">
+                    <Text style={{fontSize: 11.5, opacity: 0.78, color: "#1a1919"}}>By {data.user.profile && `${data.user.profile.first_name} ${data.user.profile.last_name} on `}</Text>
+                    <Moment style={{ fontSize: 11.5, color: "#1a1919", opacity: 0.78 }} element={Text} format="MMMM Do, YYYY">
                         {data.created_at}
                       </Moment>
                   </View>
                   <View style={{marginTop: 5}}>
-                    <Text style={{color: "#1a1919", fontSize: 13.5}}>{data.message}</Text>
+                    <Text style={{color: "#1a1919", fontSize: 13}}>{data.message}</Text>
                   </View>
                   <Divider style={{marginTop: 10}} />
                 </View>
                 ))}
               </View>
+            </View>
+        </Card>
+        <Card style={{paddingVertical: 20, marginVertical: 10, borderRadius: 0 }}>
+          <Text
+            style={{
+              fontSize: 15,
+              fontWeight: "bold",
+              color: "#76ba1b",
+              paddingLeft: 20,
+            }}
+          >
+            RELATED ADS
+          </Text>
+          <View style={{
+              fontSize: 13,
+              marginTop: 15,
+              marginBottom: 10,
+              fontSize: 15,
+            }} >
+              
+                {relatedAds.map((data, index) => (
+                  <ProductList token={props.route.params.token} {...props} item={data} key={data.slug} />
+                ))}
+              
             </View>
         </Card>
       </ScrollView>
@@ -517,11 +573,13 @@ export default function ProductDetail(props) {
               <View style={{alignItems: 'center', justifyContent: "center", height: 220}}>
               <Text style={{color: "#76BA1A", fontSize: 16,}}>Your report has been received!</Text>
               <SimpleLineIcons
-                onPress={hideModal1}
                 name="check"
                 size={45}
                 color="#76BA1A"
               />
+              <Button onPress={hideModal1} style={{marginTop: 5}} mode="contained" color="#76BA1A">
+                <Text style={{fontSize: 11, color: "white"}}>ok</Text>
+              </Button>
             </View>
             </View>
           ) : (
@@ -580,19 +638,21 @@ export default function ProductDetail(props) {
             <View>
               <SimpleLineIcons
                 style={{alignSelf: 'flex-end'}}
-                onPress={hideModal1}
+                onPress={hideModal2}
                 name="close"
                 size={25}
                 color="gray"
               />
               <View style={{alignItems: 'center', justifyContent: "center", height: 220}}>
-              <Text style={{color: "#76BA1A", fontSize: 16,}}>Your report has been received!</Text>
+              <Text style={{color: "#76BA1A", fontSize: 16,}}>Your review has been received!</Text>
               <SimpleLineIcons
-                onPress={hideModal2}
                 name="check"
                 size={45}
                 color="#76BA1A"
               />
+              <Button onPress={hideModal2} style={{marginTop: 5}} mode="contained" color="#76BA1A">
+                <Text style={{fontSize: 11, color: "white"}}>ok</Text>
+              </Button>
             </View>
             </View>
           ) : (
@@ -626,7 +686,7 @@ export default function ProductDetail(props) {
                   label="How was your experience with this seller"
                   onChangeText={onReviewPress}
               />
-              <Button loading={reportLoading} onPress={handleReport} mode="contained" color="gray" style={{marginTop: 10}}>
+              <Button loading={reportLoading} onPress={handleReview} mode="contained" color="gray" style={{marginTop: 10}}>
                 <Text style={{ color: "black", fontSize: 13 }}>Submit Review</Text>
               </Button>
           </View>
@@ -648,7 +708,7 @@ const styles = StyleSheet.create({
   },
   title: {
     paddingLeft: 20,
-    paddingRight: 3,
+    paddingRight: 4,
     paddingTop: 3,
     fontSize: 16,
     fontWeight: "700",

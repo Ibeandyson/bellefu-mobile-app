@@ -48,7 +48,9 @@ export default function Landing(props) {
         setProductsData(res.data.products.data);
         setNextPageUrl(res.data.products.next_page_url);
       })
-      .catch((error) => {});
+      .catch((error) => {
+        console.log(error.response)
+      });
   }
 
   const loadData = async () => {
@@ -154,7 +156,6 @@ export default function Landing(props) {
             <Preloader />
         </View>
     )}
-    
         <FlatList
          refreshControl={
           <RefreshControl
@@ -170,7 +171,7 @@ export default function Landing(props) {
             onEndReachedThreshold={0.5}
             ListHeaderComponent={<LandingPageContet token={token} country={country} {...props}/>}
             renderItem={({item, index}) => (
-                <ProductList data={productsData} nextPageUrl={nextPageUrl} token={token} {...props} country={country} item={item} key={item.slug} />
+                <ProductList token={token} {...props} item={item} key={item.slug} />
             )}
             ListFooterComponent={_renderFooter}
         />
