@@ -1,10 +1,31 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import {View, StyleSheet, ScrollView, TouchableOpacity} from 'react-native';
 import {List, Divider, Card, Appbar} from 'react-native-paper';
 import BottomNav from '../navigations/BottomNav';
 
 export default function DashboardNav(props) {
+    const [token, setToken] = useState(null)
+
+    const getToken = async () => {
+        let token = await AsyncStorage.getItem("user")
+        setToken(token)
+    }
+
+    const logout = () => {
+        if(token === null || token === undefined){
+            props.navigation.navigate("Login")
+        } else {
+            AsyncStorage.removeItem('user').then((r) => {
+                console.log('removed: ',r)
+            })
+        }
+    }
+
+    useEffect(() => {
+        getToken()
+    }, [])
+    
     return (
         <View>
             <ScrollView showsVerticalScrollIndicator={false}>
@@ -89,10 +110,10 @@ export default function DashboardNav(props) {
                     </TouchableOpacity>
 
                     <Divider />
-                    <TouchableOpacity onPress={() => logout}>
+                    <TouchableOpacity onPress={logout}>
                     <Card style={{borderRadius: 0}}>
                         <List.Item
-                            title="Logout"
+                            title={token === null || token === undefined ? "Log In" : "Log Out"}
                             left={props => <List.Icon {...props} icon="logout-variant" color="#ffa500" />}
                         />
                     </Card>
@@ -106,9 +127,7 @@ export default function DashboardNav(props) {
 
 
 
-const logout = () => {
-    AsyncStorage.removeItem('user');
-}
+
 
 
 const styles = StyleSheet.create({

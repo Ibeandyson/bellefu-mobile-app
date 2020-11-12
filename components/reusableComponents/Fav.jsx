@@ -10,8 +10,7 @@ const Fav = React.memo((props) => {
       );
     
       const toggleFav = (e, product_slug, isFav, color) => {
-        console.log('ckicked')
-        if (props.token === undefined) {
+        if (props.token === undefined || props.token === null) {
           props.navigation.navigate("Login");
         } else {
           setIsRed(!isRed);

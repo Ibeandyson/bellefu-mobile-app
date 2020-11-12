@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect} from "react";
 import Moment from 'react-moment';
 import StarRating from 'react-native-star-rating';
 import {
@@ -169,11 +169,13 @@ export default function ProductDetail(props) {
 		}).catch(e => {
     })
 		
-	}
+  }
+  
 
   let url = "https://bellefu.com/api/product/show";
 
   useEffect(() => {
+    setLoading(true)
     axios
       .get(`${url}/${props.route.params.item.slug}`, {
         headers: {
@@ -188,7 +190,6 @@ export default function ProductDetail(props) {
         setRelatedAds(res.data.related_products)
         handleCall(res.data.product.slug)
         handleStat(res.data.product.slug)
-        
         for (var i = 0; i < res.data.product.images.length; i++) {
           DATA.push({
             destinationId: `00${i + 1}`,
@@ -200,7 +201,7 @@ export default function ProductDetail(props) {
       .catch((error) => {
         console.log(error.response);
       });
-  }, []);
+  }, [props.route.params.item.slug]);
 
   const renderItem = (data) => (
     <View key={data.destinationId} style={styles.item}>
@@ -211,7 +212,7 @@ export default function ProductDetail(props) {
   return (
     <View style={styles.container}>
       {loading && (
-        <View style={{ height: "" + 100 + "%" }}>
+        <View style={{ height: Dimensions.get("window").height }}>
           <Preloader />
         </View>
       )}
@@ -481,9 +482,11 @@ export default function ProductDetail(props) {
                 <Text style={{color: "#1a1919"}}>{stat.average_rating && stat.average_rating > 0 ? ` ${stat.average_rating} / 5` : "No review yet"}</Text>
               </View>
               <Text style={{marginTop: 5, color: "#1a1919"}}>{total === 0 ? '' : `${total} total ratings`} </Text>
-                <Button onPress={showModal2} mode="contained" color="#76ba1b" style={{alignSelf: 'flex-start', marginTop: 10 }}>
+                {props.route.params.token !== null && props.route.params.token !== undefined && (
+                  <Button onPress={showModal2} mode="contained" color="#76ba1b" style={{alignSelf: 'flex-start', marginTop: 10 }}>
                   <Text style={{ color: "white", fontSize: 11 }}>Review Ad</Text>
                   </Button>
+                )}
               <Divider style={{marginTop: 15}} />
               <View style={{marginTop: 25}}>
                 {data.map((data, index) => (

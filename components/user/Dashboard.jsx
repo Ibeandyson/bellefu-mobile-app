@@ -17,6 +17,7 @@ export default function Dashboard(props) {
         let tokenn = await AsyncStorage.getItem('user');
         await setToken(tokenn);
         console.log(token);
+
         axios
             .get(url, {
                 headers: {
@@ -29,17 +30,10 @@ export default function Dashboard(props) {
                 setProfile(res.data.user);
                 setLoading(false);
             })
-            .catch(e => {
-                console.log('profile error', e.response);
-            });
+            .catch(e => {});
     };
 
-    useEffect(
-        () => {
-            console.log(profile);
-        },
-        [profile]
-    );
+    useEffect(() => {}, [profile]);
 
     useEffect(() => {
         loadProfile();

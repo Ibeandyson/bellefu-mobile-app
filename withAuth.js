@@ -6,7 +6,7 @@ export default function withAuth(ComponentToBeRendered) {
     const Authenticate = (props) => {
         const load = async () => {
             let token = await AsyncStorage.getItem('user')
-            if(token === undefined){
+            if(token === undefined || token === null){
                 props.navigation.navigate('Login')
             }
         }
