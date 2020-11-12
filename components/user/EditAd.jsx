@@ -9,14 +9,15 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import axios from 'axios';
 import {Picker} from '@react-native-community/picker';
 
-export default function PostAd(props) {
+export default function EditAd(props) {
     const [checked, setChecked] = React.useState('');
     const [image, setImage] = useState(null);
-    const [imageData, setImageData] = useState([]);
+    const [imageData, setImageData] = useState();
     const [token, setToken] = useState('');
     const [loading, setLoading] = useState(false);
     const [success, setSucess] = useState([]);
     const [productDetail, setProductDetail] = useState({});
+    const [propsData, setPropsData] = useState("")
     const [productData, setProductData] = useState({
         title: '',
         price: '',
@@ -30,6 +31,35 @@ export default function PostAd(props) {
     });
 
     const {subcategory, category, plan, title, price, phone, address, description, tags} = productData;
+
+    let url = "https://bellefu.com/api/product/show";
+    const fetchProduct = () => {
+        setLoading(true);
+        axios
+            .get(`${url}/${props.route.params.item.slug}`, {
+                headers: {
+                    'Content-Type': 'application/json',
+                    Accept: 'application/json'
+                }
+            })
+            .then(res => {
+                setLoading(false);
+                setProductData({
+                    subcategory: res.data.product.subcategory.slug,
+                    category: res.data.product.category.slug,
+                    plan: res.data.product.plan,
+                    title: res.data.product.title,
+                    price: res.data.product.price,
+                    phone: res.data.product.phone,
+                    address: res.data.product.address,
+                    description: res.data.product.description,
+                    tags: res.data.product.tags,
+                });
+            })
+            .catch(error => {
+                setLoading(false);
+            });
+    };
 
     const onChangeTitle = value => {
         setProductData({
@@ -148,18 +178,14 @@ export default function PostAd(props) {
         [productData, setSubCategoryData]
     );
 
-
-
-
-    
-
     const onSubmitHandle = () => {
-        let localUri = imageData.uri;
-        let filename = localUri.split('/').pop();
-    
-        // Infer the type of the image
-        let match = /\.(\w+)$/.exec(filename);
-        let type = match ? `image/${match[1]}` : `image`;
+        // let localUri = imageData.uri;
+        // let filename = localUri.split('/').pop();
+
+        // // Infer the type of the image
+        // let match = /\.(\w+)$/.exec(filename);
+        // let type = match ? `image/${match[1]}` : `image`;
+
         setLoading(true);
         const payload = new FormData();
         console.log(productData);
@@ -172,10 +198,10 @@ export default function PostAd(props) {
         payload.append('address', productData.address);
         payload.append('plan', checked);
         payload.append('description', productData.description);
-        payload.append('product_images[]', {uri: localUri, name: filename, type});
+        // payload.append('product_images[]', {uri: localUri, name: filename, type});
         console.log(payload);
         axios
-            .post('https://bellefu.com/api/user/product/save', payload, {
+            .post(`https://bellefu.com/api/user/product/update/${propsData}`, payload, {
                 headers: {
                     Authorization: `Bearer ${token}`,
                     'Content-Type': 'application/json',
@@ -184,18 +210,17 @@ export default function PostAd(props) {
                 }
             })
             .then(res => {
-               
-                setProductDetail(res.data.product_details);
                 setSucess(res.data);
+                setProductDetail(res.data.product_details);
                 Alert.alert(res.data.message);
                 console.log('succes', res.data);
                 console.log('data', res.data.product_details);
                 setLoading(false);
-              
             })
             .catch(e => {
                 setLoading(false);
-                // console.log('submit', e.response.data);
+                console.log('submit', e.response.data);
+                console.log("state ", props.route.params.item.slug)
                 // console.log('submit', e);
                 if (e.response.data) {
                     Alert.alert('All field are required, check  for any empty field and fill up');
@@ -210,15 +235,20 @@ export default function PostAd(props) {
             console.log('token', token);
         }
         getToken();
+        setPropsData(props.route.params.item.slug)
     }, []);
     console.log(checked);
-    useEffect(() => {
-        console.log(success);
-        loadCategory();
-        if (success.is_upgradable === true && productDetail.product_slug  && productData.product_plan > 0 ) {
-            props.navigation.navigate('Payment', {productDetail});
-        }
-    }, [success, productDetail]);
+    useEffect(
+        () => {
+            console.log(success);
+            loadCategory();
+            fetchProduct();
+            if (success.is_upgradable === true) {
+                props.navigation.navigate('Payment', {productDetail});
+            }
+        },
+        [success, productDetail]
+    );
     return (
         <View>
             <ScrollView showsVerticalScrollIndicator={false}>
@@ -239,7 +269,7 @@ export default function PostAd(props) {
                                 selectedValue={category}
                                 borderStyle="solid"
                                 onValueChange={value => onChangeCategory(value)}>
-                                <Picker.Item label=">>>Select Category<<<" />
+                                <Picker.Item label=">>>Category<<<" />
                                 {categoryData.map(data => (
                                     <Picker.Item key={data.slug} label={data.name} value={data.slug} />
                                 ))}
@@ -256,7 +286,7 @@ export default function PostAd(props) {
                                 marginBottom: 30
                             }}>
                             <Picker selectedValue={subcategory} onValueChange={value => onChangeSubCategory(value)}>
-                                <Picker.Item label=">>>Select Subcategory<<<" />
+                                <Picker.Item label=">>>Subcategory<<<" />
                                 {subcategoryData.map(data => (
                                     <Picker.Item key={data.slug} label={data.name} value={data.slug} />
                                 ))}
@@ -264,7 +294,7 @@ export default function PostAd(props) {
                         </TouchableOpacity>
                         <TextInput
                             mode="outlined"
-                            label="Title"
+                            label="Titel"
                             value={title}
                             onChangeText={value => onChangeTitle(value)}
                         />
@@ -305,7 +335,7 @@ export default function PostAd(props) {
                             value={description}
                             onChangeText={value => onChangeDiscription(value)}
                         />
-                        <View style={{justifyContent: 'center', marginTop: 10, alignSelf: 'center'}}>
+                        {/* <View style={{justifyContent: 'center', marginTop: 10, alignSelf: 'center'}}>
                             {image && <Image source={{uri: image}} style={{width: 200, height: 200}} />}
                         </View>
 
@@ -315,7 +345,7 @@ export default function PostAd(props) {
                                 <AntDesign name="cloudupload" size={23} color="white" />
                                 <Text style={{color: 'white'}}>upload image</Text>
                             </Button>
-                        </View>
+                        </View> */}
 
                         <View style={{flexDirection: 'row', padding: 10}}>
                             <RadioButton
@@ -387,6 +417,6 @@ const styles = StyleSheet.create({
         marginTop: 40,
         color: 'white',
         backgroundColor: '#ffa500',
-      
+        height: 45
     }
 });
