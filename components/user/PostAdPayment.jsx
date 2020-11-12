@@ -9,8 +9,8 @@ export default function PostAdPayment(props) {
     const [token, setToken] = useState('');
     const [walletData, setWalletData] = useState([]);
     const [paymentData, setPaymentData] = useState({
-        product_slug: props.route.params.productDetail.product_slug,
-        upgrade_plan:  props.route.params.productDetail.product_plan,
+        product_slug: `${props.route.params.productDetail.product_slug}`,
+        upgrade_plan: `${props.route.params.productDetail.product_plan}`,
         payment_channel: '',
         voucher_code: '',
         gateway_provider: ''
@@ -40,17 +40,35 @@ export default function PostAdPayment(props) {
                 console.log('profile error', e.response);
             });
     };
-
+    console.log(props.route.params.productDetail.product_plan)
     useEffect(() => {
         loadProfile();
-    }, [props.route.params.productDetail]);
+       
+    }, );
 
-    const onSubmitHandle = () => {
-      
-        
+    const onSubmitHandle =  () => {
+        let mainData =  {};
+		let walletPayment =  {
+			product_slug: paymentData.product_slug,
+			upgrade_plan: paymentData.upgrade_plan,
+			payment_channel: checked,
+		};
+		let voucherPayment = {
+			product_slug: paymentData.product_slug,
+			upgrade_plan: paymentData.upgrade_plan,
+			payment_channel:checked,
+			voucher_code: paymentData.voucher_code
+		};
+        if ( checked === "wallet") {
+			mainData =  walletPayment;
+		} else if ( checked=== "voucher") {
+			mainData =  voucherPayment;
+		} else if ( checked === "card") {
+			mainData =  cardPayment;
+		}
         let url = "https://bellefu.com/api/user/product/upgrade";
             axios
-                .post(url, paymentData, {
+                .post(url, mainData, {
                     headers: {
                         Authorization: `Bearer ${token}`,
                         "Content-Type": "application/json",
@@ -58,8 +76,7 @@ export default function PostAdPayment(props) {
                     }
                 })
                 .then(response => {
-                    setSuccess(response.data)
-                    Alert.alert(res.data.message);
+                    Alert.alert(response.data.message);
                     console.log(response.data)
                     setLoading(false);
                 
@@ -108,7 +125,7 @@ export default function PostAdPayment(props) {
                     <Divider />
                     <Text style={{padding: 30, paddingBottom: -25, fontWeight: 'bold'}}>Pay with Voucher</Text>
                     <View style={{padding: 10}}>
-                    <View style={{flexDirection: 'row', padding: 10}}>
+                    <View style={{flexDirection: 'row', }}>
                         <RadioButton
                             value="voucher"
                             status={checked === 'voucher' ? 'checked' : 'unchecked'}
