@@ -34,12 +34,6 @@ export default function Dashboard(props) {
             });
     };
 
-    useEffect(
-        () => {
-        },
-        [profile]
-    );
-
     useEffect(() => {
         loadProfile();
     }, []);
