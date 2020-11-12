@@ -52,45 +52,56 @@ export default function Dashboard(props) {
             <ScrollView showsVerticalScrollIndicator={false}>
                { loading ? <Preloader/>:
                    <View style={{marginBottom: 50}}>
-
+                    {/* AVATER AND FULL NAME */}
+                    <Card style={{marginVertical: 3, marginHorizontal: 10}}>    
+                        <View style={{justifyContent: 'center', alignItems: 'center', marginTop: 15}}>
+                            <Avatar.Image size={200} source={require('../../images/pic.jpg')} />
+                        </View>
+                        <View style={{justifyContent: 'center', alignItems: 'center', marginTop: 15, marginBottom: 15}}>
+                            <Text style={{fontSize: 16, fontWeight: 'bold', opacity: 0.8, paddingHorizontal: 5}}>{profile.profile && (profile.profile.first_name + " " + profile.profile.last_name ) } </Text>
+                            <Text style={{fontSize: 13, marginTop: 5, fontWeight: 'bold', opacity: 0.6, paddingHorizontal: 5}}>{profile.bio}</Text>
+                        </View>
+                    </Card>
                    <View
                         style={{
                             flexWrap: 'wrap',
                             flexDirection: 'row',
+                            justifyContent: "center",
+                            alignItems: "center",
                             maxWidth: 500
                         }}>
-                        <Card style={{width: 114, margin: 3, height: 70}}>
-                            <View style={{justifyContent: 'center', alignItems: 'center', padding: 20}}>
+                        <Card style={{width: 119.5, margin: 3, height: 85}}>
+                            <View style={{justifyContent: 'center', alignItems: 'center', height: 85}}>
                                 <Text style={{fontSize: 12}}>Ads</Text>
-                    <Text style={{fontSize: 15, opacity: 0.5}}>{profile.products_count}</Text>
+                        <Text style={{fontSize: 15, opacity: 0.5}}>{profile.products_count}</Text>
                             </View>
                         </Card>
-                        <Card style={{width: 114, margin: 3, height: 70}}>
-                            <View style={{justifyContent: 'center', alignItems: 'center', padding: 20}}>
+                        <Card style={{width: 119.5, margin: 3, height: 85}}>
+                            <View style={{justifyContent: 'center', alignItems: 'center', height: 85}}>
                                 <Text style={{fontSize: 12}}>Favourite</Text>
                     <Text style={{fontSize: 15, opacity: 0.5}}>{profile.favourite_products_count}</Text>
                             </View>
                         </Card>
-                        <Card style={{width: 114, margin: 3, height: 70}}>
-                            <View style={{justifyContent: 'center', alignItems: 'center', padding: 20}}>
+                        <Card style={{width: 119.5, margin: 3, height: 85}}>
+                            <View style={{justifyContent: 'center', alignItems: 'center', height: 85}}>
                                 <Text style={{fontSize: 12}}>Pending </Text>
                     <Text style={{fontSize: 15, opacity: 0.5}}>{profile.pending_products_count}</Text>
                             </View>
                         </Card>
-                        <Card style={{width: 114, margin: 3, height: 70}}>
-                            <View style={{justifyContent: 'center', alignItems: 'center', padding: 20}}>
+                        <Card style={{width: 119.5, margin: 3, height: 85}}>
+                            <View style={{justifyContent: 'center', alignItems: 'center', height: 85}}>
                                 <Text style={{fontSize: 12}}>Expired </Text>
                                 <Text style={{fontSize: 15, opacity: 0.5}}>{profile.expired_products_count}</Text>
                             </View>
                         </Card>
-                        <Card style={{width: 114, margin: 3, height: 70}}>
-                            <View style={{justifyContent: 'center', alignItems: 'center', padding: 20}}>
+                        <Card style={{width: 119.5, margin: 3, height: 85}}>
+                            <View style={{justifyContent: 'center', alignItems: 'center', height: 85}}>
                                 <Text style={{fontSize: 12}}>Hiden</Text>
                     <Text style={{fontSize: 15, opacity: 0.5}}>{profile.hidden_products_count}</Text>
                             </View>
                         </Card>
-                        <Card style={{width: 114, margin: 3, height: 70}}>
-                            <View style={{justifyContent: 'center', alignItems: 'center', padding: 20}}>
+                        <Card style={{width: 119.5, margin: 3, height: 85}}>
+                            <View style={{justifyContent: 'center', alignItems: 'center', height: 85}}>
                                 <Text style={{fontSize: 12}}>Wallet</Text>
                     <Text style={{fontSize: 15, opacity: 0.5}}>{profile.profile && profile.profile.wallet_balance}</Text>
                             </View>
@@ -98,17 +109,9 @@ export default function Dashboard(props) {
                     </View>
 
 
-                    {/* AVATER AND FULL NAME */}
-                    <Card style={{marginBottom: 3}}>
-                        <View style={{justifyContent: 'center', alignItems: 'center', marginTop: 15}}>
-                            <Avatar.Image size={100} source={require('../../images/pic.jpg')} />
-                        </View>
-                        <View style={{justifyContent: 'center', alignItems: 'center', marginTop: 15, marginBottom: 15}}>
-                            <Text style={{fontSize: 15, fontWeight: 'bold', opacity: 0.8}}>{profile.profile && (profile.profile.first_name + " " + profile.profile.last_name ) } </Text>
-                        </View>
-                    </Card>
+                    
                     {/* PROFILE */}
-                    <Card>
+                    <Card style={{marginHorizontal: 10, marginTop: 5}}>
                         <View style={{marginTop: 15}}>
                             <List.Section>
                                 <List.Subheader style={{fontSize: 14, fontWeight: 'bold'}}>UserName</List.Subheader>
@@ -144,14 +147,6 @@ export default function Dashboard(props) {
                                     <List.Item titleStyle={{fontSize: 13}} title={profile.country && profile.country.name} />
                                 </View>
 
-                                <List.Subheader style={{fontSize: 14, fontWeight: 'bold', marginTop: -10}}>
-                                    Bio
-                                </List.Subheader>
-                                <View style={{marginTop: -15, padding: 20}}>
-                                    <Text  titleStyle={{fontSize: 13}}> {profile.bio} </Text>
-                                       
-                                    
-                                </View>
                             </List.Section>
                         </View>
                     </Card>

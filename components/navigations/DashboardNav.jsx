@@ -1,8 +1,8 @@
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import React from 'react';
 import {View, StyleSheet, ScrollView, TouchableOpacity} from 'react-native';
 import {List, Divider, Card, Appbar} from 'react-native-paper';
 import BottomNav from '../navigations/BottomNav';
-import { AsyncStorage } from 'react-native';
 
 export default function DashboardNav(props) {
     return (
@@ -107,7 +107,7 @@ export default function DashboardNav(props) {
 
 
 const logout = () => {
-    AsyncStorage.clear('user');
+    AsyncStorage.removeItem('user');
 }
 
 

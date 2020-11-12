@@ -9,6 +9,7 @@ import {useSelector} from 'react-redux';
 import axios from 'axios';
 import Preloader from '../guest/Preloader';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import FavouriteAdItem from './FavouriteAdItem';
 
 export default function FavouriteAd(props) {
     const [ad, setAd] = useState([]);
@@ -36,11 +37,16 @@ export default function FavouriteAd(props) {
 			.then((res) => {
 				setProducts(res.data.favourites)
 				setNextPageUrl(res.data.favourites.next_page_url)
-				console.log('called next page: ', nextPageUrl)
 				setAd(ad.concat(...res.data.favourites.data))
             })
         }
-	}
+    }
+    
+    const onAdDelete = (slug) => {
+		setAd((ads) =>
+      	ads.filter((ad) => ad.slug !== slug)
+    );
+    }
 
 
     let url = "https://bellefu.com/api/user/product/favourite/list";
@@ -57,7 +63,6 @@ export default function FavouriteAd(props) {
 				})
 				.then((res) => {
 					setProducts(res.data.favourites)
-					console.log(res.data.favourites.data)
                     setAd(res.data.favourites.data);
                     setLoading(false);
 					setNextPageUrl(res.data.favourites.next_page_url)
@@ -82,7 +87,7 @@ export default function FavouriteAd(props) {
     return (
         <View>
           
-                <View style={{marginBottom: 20}}>
+                <View>
                     {loading ? (
                         <Preloader />
                     ) : status ? (
@@ -96,59 +101,7 @@ export default function FavouriteAd(props) {
                             onEndReached={nextData}
                             onEndReachedThreshold={1}
                             renderItem={({item, index}) => (
-                                <Card style={{marginTop: 5, borderRadius: 0}}>
-                                    <View style={styles.img}>
-                                    <TouchableOpacity onPress={() => props.navigation.navigate('Detail', {item})}>
-                                            <Image
-                                                style={{height: 150, width: 150}}
-                                                source={{
-                                                    uri: `https://bellefu.com/images/products/${item.slug}/${item
-                                                        .images[0]}`
-                                                }}
-                                            />
-                                        </TouchableOpacity>
-                                        <View style={styles.writUp}>
-                                            <Paragraph style={styles.title} ellipsizeMode="tail" numberOfLines={2}>
-                                            {item.title}
-                                            </Paragraph>
-                                            <Divider />
-                                            <Paragraph style={styles.price}>
-                                                <Text style={{color: '#76ba1b', fontWeight: '900'}}> {item.currency_symbol}
-                                                {item.price}</Text>
-                                        
-                                            </Paragraph>
-                                            <Divider />
-                                            <View style={{flexDirection: 'row'}}>
-                                                <Paragraph style={{fontWeight: 'bold', marginLeft: 20}}>
-                                                    Posted:
-                                                </Paragraph>
-                                
-                                                <Text style={{marginLeft: 5}}>
-                                                    {item.created_at}
-                                                </Text>
-                                                
-                                            </View>
-                                            <Divider />
-                                            <View style={styles.icons}>
-                                                <View style={{flexDirection: 'row'}}>
-                                                    <SimpleLineIcons
-                                                        style={{marginLeft: 20, marginTop: 4}}
-                                                        name="location-pin"
-                                                        size={15}
-                                                        color="#ffa500"
-                                                    />
-                                                    <Paragraph style={{paddingLeft: 5, fontSize: 13}}>
-                                                  <Text style={{color: 'black'}}>{item.address}</Text>
-                                                    </Paragraph>
-                                                </View>
-                                               
-                                            </View>
-                                            <View style={styles.like}>
-                                                    <FontAwesome5 name="heart-broken" size={25} color="red" />
-                                                </View>
-                                        </View>
-                                    </View>
-                                </Card>
+                                <FavouriteAdItem styles={styles} item={item} onAdDelete={onAdDelete} token={token} key={item.slug} />
                             )}
                         />
                     )}
@@ -165,6 +118,11 @@ const styles = StyleSheet.create({
     img: {
         padding: 10,
         flexDirection: 'row'
+    },
+    icons: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        justifyContent: 'flex-start'
     },
     title: {
         fontSize: 12,

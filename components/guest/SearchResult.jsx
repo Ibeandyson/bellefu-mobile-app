@@ -122,6 +122,7 @@ const SearchResult = (props) => {
           <Text>No Ad</Text>
         </View>
       )}
+      
         <View style={{minHeight: Dimensions.get('window').height}}>
           
           <FlatList
@@ -136,7 +137,6 @@ const SearchResult = (props) => {
                                   </View>}
               renderItem={({ item, index }) => (
                   <ProductList
-                  data={productsData}
                   token={props.route.params.token}
                   item={item}
                   key={item.slug}

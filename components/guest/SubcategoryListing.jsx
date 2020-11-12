@@ -50,7 +50,7 @@ const SubcategoryListing = (props) => {
                 <ScrollView showsVerticalScrollIndicator={false}>
                     {subcategories.map((data, index) => (
                         <View key={data.slug} style={{borderBottom: '1px solid #bab8b8', paddingHorizontal: 20, paddingTop: 15}}>
-                            <TouchableOpacity onPress={() => props.navigation.navigate('Search', {subcategory: data.slug, category: props.route.params.category_slug, country: props.country, token: props.token})}>
+                            <TouchableOpacity onPress={() => props.navigation.navigate('Search', {subcategory: data.slug, category: props.route.params.category_slug, country: props.route.params.country, token: props.route.params.token})}>
                                 <View style={{justifyContent: 'flex-start'}}>
                                     <Text>{data.name}</Text>
                                     <Text style={{color: 'gray', fontSize: 12, paddingTop: 5}}>{data.products_count}{" "}{data.products_count > 1 ? "ads" : "ad"}</Text>
