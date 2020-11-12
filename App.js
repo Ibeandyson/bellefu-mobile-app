@@ -21,6 +21,7 @@ import Dashboard from "./components/user/Dashboard";
 import UpdateProfile from "./components/user/UpadateProfile"
 import SettingsNav from "./components/navigations/SettingsNav"
 import PostAdPayment from "./components/user/PostAdPayment"
+import EditAd from "./components/user/EditAd"
 
 import { Provider } from "react-redux";
 import store from "./store";
@@ -147,6 +148,11 @@ export default function App(props) {
                 name="Payment"
                 options={{ headerShown: true }}
                 component={withAuth(PostAdPayment)}
+              />
+              <Stack.Screen
+                name="Edit"
+                options={{ headerShown: true }}
+                component={withAuth(EditAd)}
               />
                <Stack.Screen
                 name="Settings"

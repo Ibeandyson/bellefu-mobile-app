@@ -67,7 +67,9 @@ const AdTableItem = (props) => {
                     <Divider />
                     <View style={props.styles.icons}>
                         <View style={props.styles.convert}>
+                        <TouchableOpacity onPress={() => props.navigation.navigate('Edit', {item: props.item, token: props.token})}>
                             <AntDesign name="edit" size={20} color="green" />
+                         </TouchableOpacity>
                         </View>
                         <View style={props.styles.like}>
                             {loadingg ? (

@@ -93,7 +93,7 @@ export default function AdTable(props) {
                             onEndReached={nextData}
                             onEndReachedThreshold={0.5}
                             renderItem={({item, index}) => (
-                                <AdTableItem styles={styles} item={item} onAdDelete={onAdDelete} token={token} key={item.slug} />
+                                <AdTableItem styles={styles} item={item} onAdDelete={onAdDelete} token={token} key={item.slug} {...props}/>
                             )}
                         />
                     )}

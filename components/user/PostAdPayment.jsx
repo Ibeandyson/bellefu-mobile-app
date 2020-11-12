@@ -3,11 +3,14 @@ import {Text, View, Alert, StyleSheet, ScrollView} from 'react-native';
 import {Button, TextInput, RadioButton, Divider} from 'react-native-paper';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import axios from 'axios';
+import Preloader from '../guest/Preloader';
+
 
 export default function PostAdPayment(props) {
     const [checked, setChecked] = React.useState('');
     const [token, setToken] = useState('');
     const [walletData, setWalletData] = useState([]);
+    const [laoding , setLoading] = useState(false)
     const [paymentData, setPaymentData] = useState({
         product_slug: `${props.route.params.productDetail.product_slug}`,
         upgrade_plan: `${props.route.params.productDetail.product_plan}`,
@@ -40,13 +43,14 @@ export default function PostAdPayment(props) {
                 console.log('profile error', e.response);
             });
     };
-    console.log(props.route.params.productDetail.product_plan)
+   
     useEffect(() => {
         loadProfile();
        
     }, );
 
     const onSubmitHandle =  () => {
+        setLoading(true);
         let mainData =  {};
 		let walletPayment =  {
 			product_slug: paymentData.product_slug,
@@ -84,6 +88,7 @@ export default function PostAdPayment(props) {
                 .catch((error) => {
                     console.log(error);
                     console.log("submit", error.response.data)
+                    Alert.alert(error.response.data.message)
                     setLoading(false);
                 });
             console.log(paymentData);
@@ -107,6 +112,7 @@ export default function PostAdPayment(props) {
     return (
         <View>
             <ScrollView showsVerticalScrollIndicator={false}>
+                {laoding? <Preloader/> : 
                 <View style={styles.contianer}>
                     <View style={{justifyContent: 'center', alignSelf: 'center'}}>
                         <Text style={{fontWeight: 'bold', fontSize: 20}}>Choose Payment Method</Text>
@@ -151,6 +157,7 @@ export default function PostAdPayment(props) {
                             <Text style={{color: 'white'}}> Post</Text>
                         </Button>
                 </View>
+}
             </ScrollView>
         </View>
     );
