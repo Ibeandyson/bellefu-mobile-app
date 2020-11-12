@@ -101,7 +101,7 @@ export default function FavouriteAd(props) {
                             onEndReached={nextData}
                             onEndReachedThreshold={1}
                             renderItem={({item, index}) => (
-                                <FavouriteAdItem styles={styles} item={item} onAdDelete={onAdDelete} token={token} key={item.slug} />
+                                <FavouriteAdItem {...props} styles={styles} item={item} onAdDelete={onAdDelete} token={token} key={item.slug} />
                             )}
                         />
                     )}

@@ -1,5 +1,5 @@
 import { StatusBar } from "expo-status-bar";
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { StyleSheet, Text, View } from "react-native";
 import { DefaultTheme, Provider as PaperProvider } from "react-native-paper";
 import { NavigationContainer } from "@react-navigation/native";
@@ -26,6 +26,9 @@ import { Provider } from "react-redux";
 import store from "./store";
 import withAuth from "./withAuth";
 import SubcategoryListing from "./components/guest/SubcategoryListing";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import WelcomeScreen from "./components/guest/WelcomeScreen";
+import Splash from "./components/user/Splash";
 
 const theme = {
   ...DefaultTheme,
@@ -40,13 +43,24 @@ var bar_bgcolor = "#76ba1b";
 const Stack = createStackNavigator();
 
 export default function App(props) {
+  const [token, setToken] = useState("initial")
+
+  const getToken = async () => {
+    let token = await AsyncStorage.getItem("user")
+    setToken(token)
+  }
+
+  useEffect(() => {
+    getToken()
+  }, [])
+
   return (
     <View style={styles.container}>
       <Provider store={store}>
         <PaperProvider theme={theme}>
           <NavigationContainer>
             <Stack.Navigator
-              initialRouteName="Login"
+              initialRouteName="Landing"
               screenOptions={{
                 elevation: 0,
                 gestureEnabled: true,
@@ -56,6 +70,12 @@ export default function App(props) {
                 headerTitleStyle: { fontWeight: "bold", fontSize: 14 },
               }}
             >
+              
+              <Stack.Screen
+                name="Landing"
+                options={{ headerShown: false }}
+                component={token === 'initial' ? Splash : token === null || token === undefined ? WelcomeScreen : Landing}
+              />
               <Stack.Screen
                 name="Home"
                 options={{ headerShown: false }}

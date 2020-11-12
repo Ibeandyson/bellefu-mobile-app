@@ -57,7 +57,6 @@ export default function AdTable(props) {
                 }
             })
             .then(res => {
-                console.log(res.data.products.data);
                 setProducts(res.data.products);
                 setAd(res.data.products.data);
                 setNextPageUrl(res.data.products.next_page_url);
@@ -93,7 +92,7 @@ export default function AdTable(props) {
                             onEndReached={nextData}
                             onEndReachedThreshold={0.5}
                             renderItem={({item, index}) => (
-                                <AdTableItem styles={styles} item={item} onAdDelete={onAdDelete} token={token} key={item.slug} />
+                                <AdTableItem {...props} styles={styles} item={item} onAdDelete={onAdDelete} token={token} key={item.slug} />
                             )}
                         />
                     )}
