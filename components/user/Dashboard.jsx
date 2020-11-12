@@ -33,7 +33,6 @@ export default function Dashboard(props) {
             .catch(e => {});
     };
 
-    useEffect(() => {}, [profile]);
 
     useEffect(() => {
         loadProfile();

@@ -32,7 +32,7 @@ const Login = ({navigation}) => {
         isValidUser: true,
         isValidPassword: true,
     });
-    const [loading, setLoading] = React.useState(false)
+    const [loadingg, setLoading] = React.useState(false)
 
     const { colors } = useTheme();
 
@@ -105,7 +105,7 @@ const Login = ({navigation}) => {
 			    await AsyncStorage.setItem('user', res.data.token)
                 Alert.alert('login successful', `what would you like to do? ${res.data.user.profile.first_name}`, [
                     {text: 'Browse Products', onPress: () => navigation.replace('Home')},
-                    {text: 'Go to Profile', onPress: () => navigation.replace('Account')}
+                    {text: 'Go to Dashboard', onPress: () => navigation.replace('Account')}
                 ], { cancelable: false });
             } catch(e) {
                 setLoading(false)
@@ -129,7 +129,7 @@ const Login = ({navigation}) => {
     return (
       <View style={styles.container}>
           <StatusBar backgroundColor='#76BA1A' barStyle="light-content"/>
-          {loading && (
+          {loadingg && (
                 <View style={{height: '' + 150 + '%'}}>
                     <Preloader />
                 </View>

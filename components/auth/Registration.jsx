@@ -45,7 +45,7 @@ const Registration = ({navigation}) => {
         secureTextEntry: true,
         confirm_secureTextEntry: true,
     });
-    const [loading, setLoading] = React.useState(false)
+    const [loadingg, setLoading] = React.useState(false)
 
     const handleUsername = (val) => {
         if( val.length !== 0 ) {
@@ -246,7 +246,7 @@ const Registration = ({navigation}) => {
     return (
       <View style={styles.container}>
           <StatusBar backgroundColor='#76BA1A' barStyle="light-content"/>
-          {loading && (
+          {loadingg && (
                 <View style={{height: '' + 100 + '%'}}>
                     <Preloader />
                 </View>
