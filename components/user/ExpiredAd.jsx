@@ -95,7 +95,7 @@ export default function ExpiredAd(props) {
                             onEndReached={nextData}
                             onEndReachedThreshold={1}
                             renderItem={({item}) => (
-                                <AdTableItem styles={styles} item={item} onAdDelete={onAdDelete} token={token} key={item.slug} />
+                                <AdTableItem {...props} styles={styles} item={item} onAdDelete={onAdDelete} token={token} key={item.slug} />
                             )}
                         />
                     )}

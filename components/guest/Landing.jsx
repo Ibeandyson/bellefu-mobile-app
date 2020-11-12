@@ -35,7 +35,7 @@ export default function Landing(props) {
       `https://bellefu.com/api/product/list?country=${country.length > 0 ? country : countryy}`,
       {
         headers: {
-          Authorization: token !== undefined ? `Bearer ${token}` : "hfh",
+          Authorization: token !== undefined && token !== null ? `Bearer ${token}` : "hfh",
           "Content-Type": "application/json",
           Accept: "application/json",
         },

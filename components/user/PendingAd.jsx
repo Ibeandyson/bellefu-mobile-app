@@ -94,7 +94,7 @@ export default function PenddingAd(props) {
                             onEndReached={nextData}
                             onEndReachedThreshold={1}
                             renderItem={({item, index}) => (
-                                <AdTableItem styles={styles} item={item} onAdDelete={onAdDelete} token={token} key={item.slug} />
+                                <AdTableItem {...props} styles={styles} item={item} onAdDelete={onAdDelete} token={token} key={item.slug} />
                             )}
                         />
                     )}
