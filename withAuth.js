@@ -7,7 +7,7 @@ export default function withAuth(ComponentToBeRendered) {
         const load = async () => {
             let token = await AsyncStorage.getItem('user')
             if(token === undefined || token === null){
-                props.navigation.navigate('Login')
+                props.navigation.push('Login')
             }
         }
          useEffect(() => {
