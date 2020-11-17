@@ -22,6 +22,7 @@ import UpdateProfile from "./components/user/UpadateProfile"
 import SettingsNav from "./components/navigations/SettingsNav"
 import PostAdPayment from "./components/user/PostAdPayment"
 import EditAd from "./components/user/EditAd"
+import Messenger from "./components/guest/Messenger"
 import Chat from "./components/guest/Chat"
 
 import { Provider } from "react-redux";
@@ -126,9 +127,14 @@ export default function App(props) {
                 component={withAuth(PostAd)}
               />
               <Stack.Screen
-                name="Chat"
+                name="Messenger"
                 options={{ headerShown: true }}
-                component={withAuth(Chat)}
+                component={withAuth(Messenger)}
+              />
+               <Stack.Screen
+                name="chat"
+                options={{ headerShown: true }}
+                component={Chat}
               />
               <Stack.Screen
                 name="Account"

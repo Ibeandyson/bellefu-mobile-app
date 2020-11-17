@@ -1,6 +1,6 @@
 {
   "expo": {
-    "name": "bellefu1",
+    "name": "Bellefu",
     "slug": "bellefu_digital_agro_connec",
     "version": "1.0.0",
     "orientation": "portrait",
@@ -17,7 +17,9 @@
       "**/*"
     ],
     "ios": {
-      "supportsTablet": true
+      "supportsTablet": true,
+      "bundleIdentifier": "com.bellefu.bellefu",
+      "buildNumber": "1.0.0"
     },
     "android": {
       "adaptiveIcon": {

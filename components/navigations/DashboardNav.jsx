@@ -89,7 +89,7 @@ export default function DashboardNav(props) {
                         />
                     </Card>
 
-                    <Divider />
+                    {/* <Divider />
                     <TouchableOpacity onPress={() =>  props.navigation.navigate('Verification')}>
                     <Card style={{borderRadius: 0}}>
                         <List.Item
@@ -97,7 +97,7 @@ export default function DashboardNav(props) {
                             left={props => <List.Icon {...props} icon="check-circle-outline" color="#ffa500" />}
                         />
                     </Card>
-                    </TouchableOpacity>
+                    </TouchableOpacity> */}
 
                     <Divider />
                     <TouchableOpacity onPress={() =>  props.navigation.navigate('Settings')}>

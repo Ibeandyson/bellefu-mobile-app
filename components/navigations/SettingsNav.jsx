@@ -19,8 +19,8 @@ export default function SettingsNav(props) {
                     </Card>
                 </TouchableOpacity>
 
-                <Divider />
-                {/* ADS */}
+                {/* <Divider />
+            
                 <TouchableOpacity onPress={() => props.navigation.navigate('Ads')}>
                     <Card style={{borderRadius: 0, marginTop: 20}}>
                         <List.Item
@@ -28,7 +28,7 @@ export default function SettingsNav(props) {
                             left={props => <List.Icon {...props} icon="pencil-lock-outline" color="#ffa500" />}
                         />
                     </Card>
-                </TouchableOpacity>
+                </TouchableOpacity> */}
 
                
                 

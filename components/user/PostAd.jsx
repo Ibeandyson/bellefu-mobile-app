@@ -184,7 +184,6 @@ export default function PostAd(props) {
                 }
             })
             .then(res => {
-               
                 setProductDetail(res.data.product_details);
                 setSucess(res.data);
                 Alert.alert(res.data.message);
@@ -215,7 +214,7 @@ export default function PostAd(props) {
     useEffect(() => {
         console.log(success);
         loadCategory();
-        if (success.is_upgradable === true && productDetail.product_slug  && productData.product_plan > 0 ) {
+        if (success.is_upgradable === true && productDetail !== "" ) {
             props.navigation.navigate('Payment', {productDetail});
         }
     }, [success, productDetail]);

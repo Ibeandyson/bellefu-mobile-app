@@ -38,7 +38,7 @@ export default function BottomNav(props) {
                   </View>
                   </TouchableOpacity>
 
-                  <TouchableOpacity onPress={() =>  props.navigation.navigate('Home')}>
+                  <TouchableOpacity onPress={() =>  props.navigation.navigate('Messenger')}>
                   <View>
                   <MaterialCommunityIcons style={{textAlign: 'center'}} name="message" size={27} color="white" />
                   {/* <Text style={{color: "white" , fontSize: 10}}>Message</Text> */}

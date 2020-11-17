@@ -366,7 +366,7 @@ export default function UpadateProfile(props) {
                             onPress={() => onSubmitHandle(updateData,image)}
                             mode="contained"
                             icon={{source: 'filter-plus-outline', color: '#ffa500'}}>
-                            <Text style={{color: 'white'}}> Post</Text>
+                            <Text style={{color: 'white'}}>Upadte</Text>
                         </Button>
                     </View>
                 )}

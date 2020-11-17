@@ -210,8 +210,8 @@ export default function EditAd(props) {
                 }
             })
             .then(res => {
-                setSucess(res.data);
                 setProductDetail(res.data.product_details);
+                setSucess(res.data);
                 Alert.alert(res.data.message);
                 console.log('succes', res.data);
                 console.log('data', res.data.product_details);
@@ -243,7 +243,7 @@ export default function EditAd(props) {
             console.log(success);
             loadCategory();
             fetchProduct();
-            if (success.is_upgradable === true) {
+            if (success.is_upgradable === true && productDetail !== '' ) {
                 props.navigation.navigate('Payment', {productDetail});
             }
         },
@@ -392,7 +392,7 @@ export default function EditAd(props) {
                             mode="contained"
                             onPress={onSubmitHandle}
                             icon={{source: 'filter-plus-outline', color: '#ffa500'}}>
-                            <Text style={{color: 'white'}}> Post</Text>
+                            <Text style={{color: 'white'}}>Update</Text>
                         </Button>
                     </View>
                 )}
@@ -417,6 +417,6 @@ const styles = StyleSheet.create({
         marginTop: 40,
         color: 'white',
         backgroundColor: '#ffa500',
-        height: 45
+      
     }
 });

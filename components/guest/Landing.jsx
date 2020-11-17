@@ -47,6 +47,7 @@ export default function Landing(props) {
         setProducts(res.data.products);
         setProductsData(res.data.products.data);
         setNextPageUrl(res.data.products.next_page_url);
+     console.log( res.data.products.data)
       })
       .catch((error) => {
         console.log(error.response)
@@ -91,6 +92,7 @@ export default function Landing(props) {
         setProducts(res.data.products);
         setNextPageUrl(res.data.products.next_page_url);
         setProductsData(productsData.concat(...res.data.products.data));
+      
       });
     }
   };
