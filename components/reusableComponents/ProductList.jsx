@@ -26,6 +26,15 @@ const ProductList = React.memo(props => {
         Linking.openURL(`tel:${number}`);
     };
 
+
+    const chatAuth = () =>{
+        if(props.token === undefined || props.token === null){
+            props.navigation.navigate("Login")
+        }else{
+            props.navigation.navigate('chat', {item: props.item})
+        }
+    }
+
     return (
         <View>
             {/* CARD FOR PRODUCT LISTING START HERE */}
@@ -97,7 +106,7 @@ const ProductList = React.memo(props => {
                 <View style={styles.contact}>
                     <View style={{paddingLeft: 10}}>
                         <Button
-                            onPress={() => props.navigation.navigate('chat', {item: props.item})}
+                            onPress={() => chatAuth()}
                             mode="outlined"
                             style={{width: 140, borderColor: '#76ba1b', borderWidth: 1.5}}>
                             <Fontisto name="hipchat" size={13} color="#76BA1A" />
